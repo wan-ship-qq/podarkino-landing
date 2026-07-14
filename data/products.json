@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Подарочный набор орехов в шоколаде",
+    "description": "Ореховое ассорти с арахисом для учителя, воспитателя, близких людей и пикника.",
+    "image": "assets/tea-sweets.jpg",
+    "url": "https://ozon.ru/t/C6C1SG5",
+    "button": "Купить на Ozon",
+    "visible": true
+  },
+  {
+    "title": "Сувенир для близкого человека",
+    "description": "Небольшой знак внимания, который приятно получить.",
+    "image": "assets/cozy-interior.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "visible": true
+  },
+  {
+    "title": "Декор для праздника",
+    "description": "Акценты для красивой сервировки и настроения.",
+    "image": "assets/tea-sweets.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "visible": true
+  },
+  {
+    "title": "Подарок для мамы",
+    "description": "Тёплый и аккуратный вариант с заботой.",
+    "image": "assets/cozy-interior.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "visible": true
+  },
+  {
+    "title": "Приятная мелочь коллеге",
+    "description": "Уместный подарок для работы и повседневности.",
+    "image": "assets/tea-sweets.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "visible": true
+  },
+  {
+    "title": "Набор для праздника",
+    "description": "Готовая идея, когда хочется выбрать быстро.",
+    "image": "assets/cozy-interior.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "visible": true
+  }
+]

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Подаркино — редактор сайта</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <div>
+      <a class="back-link" href="index.html">← На сайт</a>
+      <h1>Редактор Подаркино</h1>
+    </div>
+    <a class="site-link" href="https://wan-ship-qq.github.io/podarkino-landing/" target="_blank" rel="noreferrer">Открыть сайт</a>
+  </header>
+
+  <main class="admin-shell">
+    <section class="publish-panel" aria-label="Публикация">
+      <label>
+        GitHub token
+        <input type="password" id="token" autocomplete="off" placeholder="ghp_..." />
+      </label>
+      <label class="check-row">
+        <input type="checkbox" id="remember-token" />
+        <span>Запомнить в этом браузере</span>
+      </label>
+      <button class="primary" type="button" id="save">Сохранить на сайте</button>
+      <button type="button" id="reload">Обновить данные</button>
+      <p class="status" id="status" role="status">Данные загружены из файлов сайта.</p>
+    </section>
+
+    <section class="tabs" aria-label="Разделы редактора">
+      <button class="tab active" type="button" data-tab="products">Товары</button>
+      <button class="tab" type="button" data-tab="content">Тексты</button>
+    </section>
+
+    <section class="panel active" data-panel="products">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">каталог</p>
+          <h2>Товары на главной</h2>
+        </div>
+        <button class="primary" type="button" id="add-product">+ Товар</button>
+      </div>
+      <div class="editor-layout">
+        <div class="products-editor" id="products-editor"></div>
+        <aside class="preview">
+          <h3>Предпросмотр</h3>
+          <div class="preview-grid" id="products-preview"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="content">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">страница</p>
+          <h2>Основные тексты и ссылка Ozon</h2>
+        </div>
+      </div>
+      <div class="content-editor" id="content-editor"></div>
+    </section>
+  </main>
+
+  <script src="admin.js" defer></script>
+</body>
+</html>
