@@ -19,6 +19,7 @@ for file in "${required_files[@]}"; do
 done
 
 while IFS= read -r asset; do
+  asset="${asset%%\?*}"
   if [[ ! -f "$asset" ]]; then
     echo "Referenced asset is missing: $asset" >&2
     exit 1

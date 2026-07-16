@@ -20,6 +20,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Manrope,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5}
+body.viewer-open{overflow:hidden}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 body:before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(135deg,rgba(255,250,242,.96),rgba(247,234,216,.9)),url("assets/cozy-interior.jpg") center/cover no-repeat}
@@ -62,7 +63,8 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .section h2,.offer h2,.final-cta h2{margin:0;font-size:clamp(34px,4.8vw,56px)}
 .section-head p:not(.eyebrow),.offer p,.story-card p,.final-cta p{color:var(--muted);font-size:18px}
 .product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.product-card{overflow:hidden;background:#fff}
+.product-card{overflow:hidden;background:#fff;cursor:zoom-in}
+.product-card:focus-visible{outline:3px solid var(--caramel);outline-offset:4px}
 .product-img{position:relative;height:220px;background:var(--paper-2);overflow:hidden}
 .product-img img{width:100%;height:100%;object-fit:cover;transition:.25s ease}
 .product-img img[src*="nuts-in-chocolate-product-main"]{object-fit:cover;object-position:50% 46%}
@@ -70,6 +72,11 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .product-badge{position:absolute;left:14px;top:14px;z-index:2;padding:7px 10px;border-radius:999px;background:rgba(255,253,248,.92);color:var(--caramel);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 10px 26px rgba(58,35,24,.12)}
 .product-card h3{margin:18px 18px 8px;font-size:19px;line-height:1.24}
 .product-card p{min-height:70px;margin:0 18px 16px;color:var(--muted)}
+.image-viewer[hidden]{display:none}
+.image-viewer{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:rgba(20,12,8,.94);cursor:zoom-out}
+.image-viewer-photo{max-width:100%;max-height:calc(100dvh - 48px);width:auto;height:auto;object-fit:contain;box-shadow:0 18px 70px rgba(0,0,0,.38);cursor:default}
+.image-viewer-close{position:fixed;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:1;display:grid;place-items:center;width:48px;height:48px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:var(--ink);font:400 38px/1 Arial,sans-serif;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.image-viewer-close:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
 .offer{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:center;max-width:var(--max);margin:0 auto;padding:34px 24px;border-radius:28px;background:linear-gradient(105deg,#fffdf8,rgba(239,216,185,.76));border:1px solid rgba(255,255,255,.72);box-shadow:var(--shadow)}
 .offer>div{padding:22px 8px 22px 18px}
 .offer p{max-width:560px}
@@ -122,6 +129,8 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .offer>div{padding:0}
   .offer img{height:230px;border-radius:18px}
   .product-img{height:210px}
+  .image-viewer{padding:0}
+  .image-viewer-photo{max-height:100dvh}
   .story-card{padding:26px;border-radius:22px}
   .story-card img{width:150px;height:150px}
   .final-cta{padding:34px 18px}
