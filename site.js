@@ -7,6 +7,15 @@ const fallbackProducts = [
     button: "Купить на Ozon",
     badge: "хит",
     visible: true
+  },
+  {
+    title: "Подарочный набор сладостей «Сердце»",
+    description: "Яркий сладкий подарок для близкого человека, тёплого признания или особого повода.",
+    image: "assets/sweets-heart-gift-set.jpg",
+    url: "https://www.ozon.ru/seller/podarkino/",
+    button: "Купить на Ozon",
+    badge: "новинка",
+    visible: true
   }
 ];
 
