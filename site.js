@@ -2,7 +2,7 @@ const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
-    image: "assets/nuts-in-chocolate-gift-set.jpg",
+    image: "assets/nuts-in-chocolate-product-main.jpg",
     url: "https://ozon.ru/t/C6C1SG5",
     button: "Купить на Ozon",
     badge: "хит",
