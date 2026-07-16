@@ -16,6 +16,15 @@ const fallbackProducts = [
     button: "Купить на Ozon",
     badge: "новинка",
     visible: true
+  },
+  {
+    title: "Подарочный набор сладостей «Нежность»",
+    description: "Нежный сладкий подарок для близкого человека, тёплого поздравления или знака внимания.",
+    image: "assets/sweets-tenderness-gift-set.jpg",
+    url: "https://www.ozon.ru/seller/podarkino/",
+    button: "Купить на Ozon",
+    badge: "новинка",
+    visible: true
   }
 ];
 
