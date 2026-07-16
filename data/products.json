@@ -3,8 +3,6 @@
     "title": "Подарочный набор орехов в шоколаде",
     "description": "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     "image": "assets/nuts-in-chocolate-product-main.jpg",
-    "url": "https://ozon.ru/t/C6C1SG5",
-    "button": "Купить на Ozon",
     "badge": "хит",
     "visible": true
   },
@@ -12,8 +10,6 @@
     "title": "Подарочный набор сладостей «Сердце»",
     "description": "Яркий сладкий подарок для близкого человека, искреннего признания или особого повода.",
     "image": "assets/sweets-heart-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "новинка",
     "visible": true
   },
@@ -21,8 +17,6 @@
     "title": "Подарочный набор сладостей «Нежность»",
     "description": "Нежный сладкий подарок для близкого человека, душевного поздравления или знака внимания.",
     "image": "assets/sweets-tenderness-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "новинка",
     "visible": true
   },
@@ -30,8 +24,6 @@
     "title": "Подарочный набор сладостей «С днём рождения!»",
     "description": "Праздничный набор сладостей для душевного поздравления с днём рождения.",
     "image": "assets/sweets-happy-birthday-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "праздник",
     "visible": true
   },
@@ -39,8 +31,6 @@
     "title": "Подарочный набор «Настоящему мужчине»",
     "description": "Готовый подарочный набор для мужчины к празднику или как знак внимания.",
     "image": "assets/real-man-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "мужчине",
     "visible": true
   },
@@ -48,8 +38,6 @@
     "title": "Подарочный набор солёных орехов",
     "description": "Ассорти солёных орехов ручной фасовки — готовая закуска и подарок.",
     "image": "assets/salted-nuts-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "орехи",
     "visible": true
   },
@@ -57,8 +45,6 @@
     "title": "Подарочный набор чая Витаминный",
     "description": "Четыре вида заварного чая в подарочной упаковке — польза и уют в одном наборе.",
     "image": "assets/vitamin-tea-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "чай",
     "visible": true
   },
@@ -66,8 +52,6 @@
     "title": "Подарочный набор чая Ягодный",
     "description": "Ароматный ягодный чай в подарочной коробке для уютного чаепития.",
     "image": "assets/berry-tea-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "чай",
     "visible": true
   },
@@ -75,8 +59,6 @@
     "title": "Подарочный набор чая и сладостей",
     "description": "Чай и сладости в подарочной коробке для поздравления и приятного чаепития.",
     "image": "assets/tea-and-sweets-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "подарок",
     "visible": true
   },
@@ -84,8 +66,6 @@
     "title": "Большой Подарочный набор чая и сладостей",
     "description": "Большой набор чая и сладостей для семьи, праздника или особого повода.",
     "image": "assets/large-tea-and-sweets-gift-set.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
     "badge": "большой набор",
     "visible": true
   }

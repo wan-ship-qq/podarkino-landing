@@ -8,18 +8,14 @@ const productDefaults = {
   title: "Новый товар",
   description: "",
   image: "assets/tea-sweets.jpg",
-  url: "https://www.ozon.ru/seller/podarkino/",
-  button: "Купить на Ozon",
   visible: true
 };
 
 const contentFields = [
-  ["storeUrl", "Ссылка магазина Ozon", "url"],
   ["heroEyebrow", "Подпись над главным заголовком", "text"],
   ["heroTitle", "Главный заголовок", "textarea"],
   ["heroLead", "Текст под главным заголовком", "textarea"],
   ["heroPrimaryButton", "Кнопка выбора", "text"],
-  ["heroSecondaryButton", "Кнопка Ozon", "text"],
   ["productsEyebrow", "Подпись блока товаров", "text"],
   ["productsTitle", "Заголовок блока товаров", "textarea"],
   ["productsLead", "Текст блока товаров", "textarea"],
@@ -164,9 +160,7 @@ function renderProducts() {
     const fields = el("div", "field-grid");
     fields.append(
       inputField("Название", product.title, (value) => updateProduct(index, "title", value)),
-      inputField("Кнопка", product.button, (value) => updateProduct(index, "button", value)),
       inputField("Фото / URL картинки", product.image, (value) => updateProduct(index, "image", value), { type: "url", wide: true }),
-      inputField("Ссылка на товар", product.url, (value) => updateProduct(index, "url", value), { type: "url", wide: true }),
       inputField("Описание", product.description, (value) => updateProduct(index, "description", value), { textarea: true, wide: true })
     );
 
@@ -198,11 +192,6 @@ function renderPreview() {
     const body = el("div", "preview-body");
     body.append(el("h4", "", product.title || "Без названия"));
     body.append(el("p", "", product.description || ""));
-    const link = el("a", "", product.button || "Купить на Ozon");
-    link.href = product.url || "#";
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    body.append(link);
     card.append(imageWrap, body);
     productsPreview.append(card);
   });

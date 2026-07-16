@@ -3,8 +3,6 @@ const fallbackProducts = [
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     image: "assets/nuts-in-chocolate-product-main.jpg",
-    url: "https://ozon.ru/t/C6C1SG5",
-    button: "Купить на Ozon",
     badge: "хит",
     visible: true
   },
@@ -12,8 +10,6 @@ const fallbackProducts = [
     title: "Подарочный набор сладостей «Сердце»",
     description: "Яркий сладкий подарок для близкого человека, искреннего признания или особого повода.",
     image: "assets/sweets-heart-gift-set.jpg",
-    url: "https://www.ozon.ru/seller/podarkino/",
-    button: "Купить на Ozon",
     badge: "новинка",
     visible: true
   },
@@ -21,17 +17,13 @@ const fallbackProducts = [
     title: "Подарочный набор сладостей «Нежность»",
     description: "Нежный сладкий подарок для близкого человека, душевного поздравления или знака внимания.",
     image: "assets/sweets-tenderness-gift-set.jpg",
-    url: "https://www.ozon.ru/seller/podarkino/",
-    button: "Купить на Ozon",
     badge: "новинка",
     visible: true
   }
 ];
 
 const productsRoot = document.querySelector("[data-products]");
-const defaultContent = {
-  storeUrl: "https://www.ozon.ru/seller/podarkino/"
-};
+const defaultContent = {};
 
 function productCard(product) {
   const article = document.createElement("article");
@@ -54,12 +46,6 @@ function productCard(product) {
   const description = document.createElement("p");
   description.textContent = product.description || "";
 
-  const link = document.createElement("a");
-  link.href = product.url || "https://www.ozon.ru/seller/podarkino/";
-  link.target = "_blank";
-  link.rel = "noreferrer";
-  link.textContent = product.button || "Купить на Ozon";
-
   if (product.badge) {
     const badge = document.createElement("span");
     badge.className = "product-badge";
@@ -67,7 +53,7 @@ function productCard(product) {
     imageWrap.append(badge);
   }
 
-  article.append(imageWrap, title, description, link);
+  article.append(imageWrap, title, description);
   return article;
 }
 
@@ -101,9 +87,6 @@ function applyContent(content) {
     }
   });
 
-  document.querySelectorAll("[data-link='store']").forEach((element) => {
-    if (data.storeUrl) element.href = data.storeUrl;
-  });
 }
 
 async function loadContent() {
