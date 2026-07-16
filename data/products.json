@@ -27,48 +27,66 @@
     "visible": true
   },
   {
-    "title": "Набор к чаю для близких",
-    "description": "Тёплый вариант для родителей, друзей или семейного вечера.",
-    "image": "assets/tea-sweets.jpg",
+    "title": "Подарочный набор сладостей «С днём рождения!»",
+    "description": "Праздничный набор сладостей для тёплого поздравления с днём рождения.",
+    "image": "assets/sweets-happy-birthday-gift-set.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
-    "badge": "к чаю",
+    "badge": "праздник",
     "visible": true
   },
   {
-    "title": "Подарок учителю",
-    "description": "Аккуратный знак благодарности без лишней официальности.",
-    "image": "assets/nuts-in-chocolate-gift-set.jpg",
+    "title": "Подарочный набор «Настоящему мужчине»",
+    "description": "Готовый подарочный набор для мужчины к празднику или как знак внимания.",
+    "image": "assets/real-man-gift-set.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
-    "badge": "учителю",
+    "badge": "мужчине",
     "visible": true
   },
   {
-    "title": "Набор для подруги",
-    "description": "Вкусный подарок, который можно подарить на день рождения или просто так.",
-    "image": "assets/cozy-interior.jpg",
+    "title": "Подарочный набор солёных орехов",
+    "description": "Ассорти солёных орехов ручной фасовки — готовая закуска и подарок.",
+    "image": "assets/salted-nuts-gift-set.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
-    "badge": "подруге",
+    "badge": "орехи",
     "visible": true
   },
   {
-    "title": "Комплимент коллеге",
-    "description": "Уместный небольшой подарок для работы, праздника или благодарности.",
-    "image": "assets/tea-sweets.jpg",
+    "title": "Подарочный набор чая Витаминный",
+    "description": "Четыре вида заварного чая в подарочной упаковке — польза и уют в одном наборе.",
+    "image": "assets/vitamin-tea-gift-set.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
-    "badge": "коллеге",
+    "badge": "чай",
     "visible": true
   },
   {
-    "title": "Набор для семьи",
-    "description": "Для спокойного вечера, чаепития и повода собраться вместе.",
-    "image": "assets/nuts-in-chocolate-gift-set.jpg",
+    "title": "Подарочный набор чая Ягодный",
+    "description": "Ароматный ягодный чай в подарочной коробке для уютного чаепития.",
+    "image": "assets/berry-tea-gift-set.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
-    "badge": "семье",
+    "badge": "чай",
+    "visible": true
+  },
+  {
+    "title": "Подарочный набор чая и сладостей",
+    "description": "Чай и сладости в подарочной коробке для поздравления и приятного чаепития.",
+    "image": "assets/tea-and-sweets-gift-set.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "badge": "подарок",
+    "visible": true
+  },
+  {
+    "title": "Большой Подарочный набор чая и сладостей",
+    "description": "Большой набор чая и сладостей для семьи, праздника или особого повода.",
+    "image": "assets/large-tea-and-sweets-gift-set.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "badge": "большой набор",
     "visible": true
   }
 ]
