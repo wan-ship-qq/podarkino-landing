@@ -52,6 +52,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .hero-orbit:before,.hero-orbit:after{content:"";position:absolute;border:1px solid rgba(167,97,46,.24);border-radius:50%;transform:rotate(-18deg)}
 .hero-orbit:before{inset:36px -22px}
 .hero-orbit:after{inset:82px -58px}
+.hero-logo{position:absolute;right:6%;top:2%;z-index:4;width:130px;height:130px;border-radius:50%;object-fit:cover;border:7px solid rgba(255,253,248,.92);box-shadow:0 18px 42px rgba(58,35,24,.18)}
 .hero-product{position:absolute;left:8%;right:0;top:12%;z-index:2;width:88%;height:58%;object-fit:cover;border-radius:32px;box-shadow:0 26px 58px rgba(58,35,24,.22)}
 .hero-card{position:absolute;z-index:3;padding:16px 18px;border-radius:var(--radius);background:rgba(255,253,248,.92);border:1px solid rgba(95,61,39,.14);box-shadow:0 18px 42px rgba(58,35,24,.14)}
 .hero-card b,.hero-card strong,.hero-card span{display:block}
@@ -123,6 +124,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .hero h1{font-size:43px}
   .hero-actions .btn{width:100%}
   .hero-showcase{min-height:390px}
+  .hero-logo{right:8px;top:0;width:92px;height:92px;border-width:5px}
   .hero-product{left:0;top:14%;width:100%;height:56%;border-radius:22px}
   .hero-card-main{right:4px;bottom:82px;width:184px}
   .hero-card-side{left:4px;bottom:10px;width:180px}
