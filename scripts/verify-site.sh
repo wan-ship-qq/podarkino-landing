@@ -25,7 +25,7 @@ while IFS= read -r asset; do
   fi
 done < <(grep -Eo 'assets/[^"]+' index.html styles.css | cut -d: -f2- | sort -u)
 
-if ! grep -q 'href="styles.css"' index.html; then
+if ! grep -Eq 'href="styles\.css(\?[^\"]*)?"' index.html; then
   echo "index.html does not link styles.css" >&2
   exit 1
 fi
