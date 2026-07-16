@@ -1,50 +1,56 @@
 [
   {
     "title": "Подарочный набор орехов в шоколаде",
-    "description": "Ореховое ассорти с арахисом для учителя, воспитателя, близких людей и пикника.",
+    "description": "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     "image": "assets/nuts-in-chocolate-gift-set.jpg",
     "url": "https://ozon.ru/t/C6C1SG5",
     "button": "Купить на Ozon",
+    "badge": "хит",
     "visible": true
   },
   {
-    "title": "Сувенир для близкого человека",
-    "description": "Небольшой знак внимания, который приятно получить.",
-    "image": "assets/cozy-interior.jpg",
-    "url": "https://www.ozon.ru/seller/podarkino/",
-    "button": "Купить на Ozon",
-    "visible": true
-  },
-  {
-    "title": "Декор для праздника",
-    "description": "Акценты для красивой сервировки и настроения.",
+    "title": "Набор к чаю для близких",
+    "description": "Тёплый вариант для родителей, друзей или семейного вечера.",
     "image": "assets/tea-sweets.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
+    "badge": "к чаю",
     "visible": true
   },
   {
-    "title": "Подарок для мамы",
-    "description": "Тёплый и аккуратный вариант с заботой.",
+    "title": "Подарок учителю",
+    "description": "Аккуратный знак благодарности без лишней официальности.",
+    "image": "assets/nuts-in-chocolate-gift-set.jpg",
+    "url": "https://www.ozon.ru/seller/podarkino/",
+    "button": "Купить на Ozon",
+    "badge": "учителю",
+    "visible": true
+  },
+  {
+    "title": "Набор для подруги",
+    "description": "Вкусный подарок, который можно подарить на день рождения или просто так.",
     "image": "assets/cozy-interior.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
+    "badge": "подруге",
     "visible": true
   },
   {
-    "title": "Приятная мелочь коллеге",
-    "description": "Уместный подарок для работы и повседневности.",
+    "title": "Комплимент коллеге",
+    "description": "Уместный небольшой подарок для работы, праздника или благодарности.",
     "image": "assets/tea-sweets.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
+    "badge": "коллеге",
     "visible": true
   },
   {
-    "title": "Набор для праздника",
-    "description": "Готовая идея, когда хочется выбрать быстро.",
-    "image": "assets/cozy-interior.jpg",
+    "title": "Набор для семьи",
+    "description": "Для спокойного вечера, чаепития и повода собраться вместе.",
+    "image": "assets/nuts-in-chocolate-gift-set.jpg",
     "url": "https://www.ozon.ru/seller/podarkino/",
     "button": "Купить на Ozon",
+    "badge": "семье",
     "visible": true
   }
 ]

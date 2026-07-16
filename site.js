@@ -1,10 +1,11 @@
 const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
-    description: "Ореховое ассорти с арахисом для учителя, воспитателя, близких людей и пикника.",
+    description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     image: "assets/nuts-in-chocolate-gift-set.jpg",
     url: "https://ozon.ru/t/C6C1SG5",
     button: "Купить на Ozon",
+    badge: "хит",
     visible: true
   }
 ];
@@ -40,6 +41,13 @@ function productCard(product) {
   link.target = "_blank";
   link.rel = "noreferrer";
   link.textContent = product.button || "Купить на Ozon";
+
+  if (product.badge) {
+    const badge = document.createElement("span");
+    badge.className = "product-badge";
+    badge.textContent = product.badge;
+    imageWrap.append(badge);
+  }
 
   article.append(imageWrap, title, description, link);
   return article;
