@@ -4,7 +4,7 @@ const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
-    image: "assets/nuts-in-chocolate-product-main.jpg",
+    image: "assets/nuts-in-chocolate-product-main.jpg?v=20260716-1800",
     badge: "хит",
     visible: true
   },
