@@ -1,3 +1,5 @@
+const assetVersion = "20260716-1758";
+
 const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
@@ -68,7 +70,7 @@ async function loadProducts() {
   if (!productsRoot) return;
 
   try {
-    const response = await fetch("data/products.json", { cache: "no-store" });
+    const response = await fetch(`data/products.json?v=${assetVersion}`, { cache: "no-store" });
     if (!response.ok) throw new Error("Products not available");
     const products = await response.json();
     renderProducts(Array.isArray(products) && products.length ? products : fallbackProducts);
@@ -91,7 +93,7 @@ function applyContent(content) {
 
 async function loadContent() {
   try {
-    const response = await fetch("data/content.json", { cache: "no-store" });
+    const response = await fetch(`data/content.json?v=${assetVersion}`, { cache: "no-store" });
     if (!response.ok) throw new Error("Content not available");
     applyContent(await response.json());
   } catch (error) {
