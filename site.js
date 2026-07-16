@@ -10,7 +10,7 @@ const fallbackProducts = [
   },
   {
     title: "Подарочный набор сладостей «Сердце»",
-    description: "Яркий сладкий подарок для близкого человека, тёплого признания или особого повода.",
+    description: "Яркий сладкий подарок для близкого человека, искреннего признания или особого повода.",
     image: "assets/sweets-heart-gift-set.jpg",
     url: "https://www.ozon.ru/seller/podarkino/",
     button: "Купить на Ozon",
@@ -19,7 +19,7 @@ const fallbackProducts = [
   },
   {
     title: "Подарочный набор сладостей «Нежность»",
-    description: "Нежный сладкий подарок для близкого человека, тёплого поздравления или знака внимания.",
+    description: "Нежный сладкий подарок для близкого человека, душевного поздравления или знака внимания.",
     image: "assets/sweets-tenderness-gift-set.jpg",
     url: "https://www.ozon.ru/seller/podarkino/",
     button: "Купить на Ozon",
