@@ -76,14 +76,16 @@ productViewer.setAttribute("aria-label", "Карточка подарочног�
 productViewer.hidden = true;
 productViewer.innerHTML = `
   <button class="product-viewer-close" type="button" aria-label="Закрыть карточку">&times;</button>
-  <div class="product-viewer-stage">
-    <button class="product-viewer-nav product-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
-    <img class="product-viewer-photo" alt="" data-image-viewer="off" />
-    <button class="product-viewer-nav product-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
-    <span class="product-viewer-count" aria-live="polite"></span>
+  <div class="product-viewer-hero">
+    <h2 class="product-viewer-title"></h2>
+    <div class="product-viewer-stage">
+      <button class="product-viewer-nav product-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
+      <img class="product-viewer-photo" alt="" data-image-viewer="off" />
+      <button class="product-viewer-nav product-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
+      <span class="product-viewer-count" aria-live="polite"></span>
+    </div>
   </div>
   <div class="product-viewer-details">
-    <h2></h2>
     <p class="product-viewer-description"></p>
     <div class="product-facts">
       <div class="product-fact"><span>Состав</span><b data-product-composition></b></div>
@@ -124,7 +126,7 @@ function openProductViewer(product) {
     src,
     alt: `${product.title || "Подарочный набор"}${index ? `, фото ${index + 1}` : ""}`
   }));
-  productViewer.querySelector("h2").textContent = product.title || "Подарочный набор";
+  productViewer.querySelector(".product-viewer-title").textContent = product.title || "Подарочный набор";
   productViewer.querySelector(".product-viewer-description").textContent = product.description || "Описание набора скоро появится.";
   productViewer.querySelector("[data-product-composition]").textContent = product.composition || "Состав скоро добавим";
   productViewer.querySelector("[data-product-weight]").textContent = product.weight || "Уточняется";
