@@ -1,10 +1,17 @@
-const assetVersion = "20260716-1758";
+const assetVersion = "20260717-1302";
 
 const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     image: "assets/nuts-in-chocolate-product-main.jpg?v=20260716-1800",
+    images: [
+      "assets/nuts-in-chocolate-detail-1.jpg",
+      "assets/nuts-in-chocolate-detail-2.jpg",
+      "assets/nuts-in-chocolate-detail-3.jpg",
+      "assets/nuts-in-chocolate-detail-4.jpg",
+      "assets/nuts-in-chocolate-detail-5.jpg"
+    ],
     badge: "хит",
     visible: true
   },
@@ -42,6 +49,22 @@ function productCard(product) {
     imageWrap.append(image);
   }
 
+  const additionalImages = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
+  let gallery = null;
+  if (additionalImages.length) {
+    gallery = document.createElement("div");
+    gallery.className = "product-gallery";
+    gallery.setAttribute("aria-label", `Дополнительные фото: ${product.title || "подарок"}`);
+
+    additionalImages.forEach((src, index) => {
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = `${product.title || "Подарок"}, фото ${index + 2}`;
+      image.loading = "lazy";
+      gallery.append(image);
+    });
+  }
+
   const title = document.createElement("h3");
   title.textContent = product.title || "Подарок";
 
@@ -55,7 +78,9 @@ function productCard(product) {
     imageWrap.append(badge);
   }
 
-  article.append(imageWrap, title, description);
+  article.append(imageWrap);
+  if (gallery) article.append(gallery);
+  article.append(title, description);
   return article;
 }
 

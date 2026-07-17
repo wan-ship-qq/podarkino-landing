@@ -3,6 +3,13 @@
     "title": "Подарочный набор орехов в шоколаде",
     "description": "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     "image": "assets/nuts-in-chocolate-product-main.jpg?v=20260716-1800",
+    "images": [
+      "assets/nuts-in-chocolate-detail-1.jpg",
+      "assets/nuts-in-chocolate-detail-2.jpg",
+      "assets/nuts-in-chocolate-detail-3.jpg",
+      "assets/nuts-in-chocolate-detail-4.jpg",
+      "assets/nuts-in-chocolate-detail-5.jpg"
+    ],
     "badge": "хит",
     "visible": true
   },
