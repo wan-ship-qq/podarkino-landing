@@ -1,4 +1,4 @@
-const assetVersion = "20260717-1316";
+const assetVersion = "20260717-1340";
 
 const fallbackProducts = [
   {
@@ -45,6 +45,11 @@ function productCard(product) {
   const article = document.createElement("article");
   article.className = "product-card";
 
+  const box = document.createElement("button");
+  box.className = "product-box";
+  box.type = "button";
+  box.setAttribute("aria-label", `Открыть набор: ${product.title || "Подарок"}`);
+
   const imageWrap = document.createElement("div");
   imageWrap.className = "product-img";
 
@@ -53,30 +58,18 @@ function productCard(product) {
     image.src = product.image;
     image.alt = product.title || "Подарок из магазина Подаркино";
     image.loading = "lazy";
+    image.dataset.imageViewer = "off";
     imageWrap.append(image);
-  }
-
-  const additionalImages = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
-  let gallery = null;
-  if (additionalImages.length) {
-    gallery = document.createElement("div");
-    gallery.className = "product-gallery";
-    gallery.setAttribute("aria-label", `Дополнительные фото: ${product.title || "подарок"}`);
-
-    additionalImages.forEach((src, index) => {
-      const image = document.createElement("img");
-      image.src = src;
-      image.alt = `${product.title || "Подарок"}, фото ${index + 2}`;
-      image.loading = "lazy";
-      gallery.append(image);
-    });
   }
 
   const title = document.createElement("h3");
   title.textContent = product.title || "Подарок";
 
-  const description = document.createElement("p");
-  description.textContent = product.description || "";
+  const label = document.createElement("div");
+  label.className = "product-label";
+  const hint = document.createElement("small");
+  hint.textContent = "Рассмотреть набор";
+  label.append(title, hint);
 
   if (product.badge) {
     const badge = document.createElement("span");
@@ -85,11 +78,109 @@ function productCard(product) {
     imageWrap.append(badge);
   }
 
-  article.append(imageWrap);
-  if (gallery) article.append(gallery);
-  article.append(title, description);
+  box.append(imageWrap, label);
+  box.addEventListener("click", () => openProductViewer(product));
+  article.append(box);
   return article;
 }
+
+const productViewer = document.createElement("div");
+productViewer.className = "product-viewer";
+productViewer.setAttribute("role", "dialog");
+productViewer.setAttribute("aria-modal", "true");
+productViewer.setAttribute("aria-label", "Карточка подарочного набора");
+productViewer.hidden = true;
+productViewer.innerHTML = `
+  <button class="product-viewer-close" type="button" aria-label="Закрыть карточку">&times;</button>
+  <div class="product-viewer-stage">
+    <button class="product-viewer-nav product-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
+    <img class="product-viewer-photo" alt="" data-image-viewer="off" />
+    <button class="product-viewer-nav product-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
+    <span class="product-viewer-count" aria-live="polite"></span>
+  </div>
+  <div class="product-viewer-details">
+    <h2></h2>
+    <p class="product-viewer-description"></p>
+    <div class="product-facts">
+      <div class="product-fact"><span>Состав</span><b data-product-composition></b></div>
+      <div class="product-fact"><span>Масса</span><b data-product-weight></b></div>
+      <div class="product-fact"><span>Цена</span><b data-product-price></b></div>
+    </div>
+  </div>
+`;
+document.body.append(productViewer);
+
+const productViewerPhoto = productViewer.querySelector(".product-viewer-photo");
+const productViewerClose = productViewer.querySelector(".product-viewer-close");
+const productViewerPrevious = productViewer.querySelector(".product-viewer-prev");
+const productViewerNext = productViewer.querySelector(".product-viewer-next");
+const productViewerCount = productViewer.querySelector(".product-viewer-count");
+let activeProductImages = [];
+let activeProductImageIndex = 0;
+let productLastFocusedElement = null;
+let productTouchStartX = null;
+
+function showProductImage(index) {
+  if (!activeProductImages.length) return;
+  activeProductImageIndex = (index + activeProductImages.length) % activeProductImages.length;
+  const item = activeProductImages[activeProductImageIndex];
+  productViewerPhoto.src = item.src;
+  productViewerPhoto.alt = item.alt;
+  productViewerCount.textContent = `${activeProductImageIndex + 1} / ${activeProductImages.length}`;
+  const singleImage = activeProductImages.length < 2;
+  productViewerPrevious.hidden = singleImage;
+  productViewerNext.hidden = singleImage;
+  productViewerCount.hidden = singleImage;
+}
+
+function openProductViewer(product) {
+  productLastFocusedElement = document.activeElement;
+  const sources = [product.image, ...(Array.isArray(product.images) ? product.images : [])].filter(Boolean);
+  activeProductImages = sources.map((src, index) => ({
+    src,
+    alt: `${product.title || "Подарочный набор"}${index ? `, фото ${index + 1}` : ""}`
+  }));
+  productViewer.querySelector("h2").textContent = product.title || "Подарочный набор";
+  productViewer.querySelector(".product-viewer-description").textContent = product.description || "Описание набора скоро появится.";
+  productViewer.querySelector("[data-product-composition]").textContent = product.composition || "Состав скоро добавим";
+  productViewer.querySelector("[data-product-weight]").textContent = product.weight || "Уточняется";
+  productViewer.querySelector("[data-product-price]").textContent = product.price || "Уточняется";
+  showProductImage(0);
+  productViewer.hidden = false;
+  document.body.classList.add("viewer-open");
+  productViewerClose.focus();
+}
+
+function closeProductViewer() {
+  if (productViewer.hidden) return;
+  productViewer.hidden = true;
+  productViewerPhoto.removeAttribute("src");
+  activeProductImages = [];
+  document.body.classList.remove("viewer-open");
+  productLastFocusedElement?.focus();
+}
+
+productViewerClose.addEventListener("click", closeProductViewer);
+productViewerPrevious.addEventListener("click", () => showProductImage(activeProductImageIndex - 1));
+productViewerNext.addEventListener("click", () => showProductImage(activeProductImageIndex + 1));
+productViewer.addEventListener("click", (event) => {
+  if (event.target === productViewer) closeProductViewer();
+});
+productViewer.addEventListener("touchstart", (event) => {
+  if (event.touches.length === 1) productTouchStartX = event.touches[0].clientX;
+}, { passive: true });
+productViewer.addEventListener("touchend", (event) => {
+  if (productTouchStartX === null || !event.changedTouches.length) return;
+  const deltaX = event.changedTouches[0].clientX - productTouchStartX;
+  productTouchStartX = null;
+  if (Math.abs(deltaX) > 50) showProductImage(activeProductImageIndex + (deltaX < 0 ? 1 : -1));
+}, { passive: true });
+document.addEventListener("keydown", (event) => {
+  if (productViewer.hidden) return;
+  if (event.key === "Escape") closeProductViewer();
+  if (event.key === "ArrowLeft") showProductImage(activeProductImageIndex - 1);
+  if (event.key === "ArrowRight") showProductImage(activeProductImageIndex + 1);
+});
 
 const imageViewer = document.createElement("div");
 imageViewer.className = "image-viewer";

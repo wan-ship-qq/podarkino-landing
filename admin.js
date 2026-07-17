@@ -7,6 +7,9 @@ const CONTENT_PATH = "data/content.json";
 const productDefaults = {
   title: "Новый товар",
   description: "",
+  composition: "",
+  weight: "",
+  price: "",
   image: "assets/tea-sweets.jpg",
   visible: true
 };
@@ -161,7 +164,10 @@ function renderProducts() {
     fields.append(
       inputField("Название", product.title, (value) => updateProduct(index, "title", value)),
       inputField("Фото / URL картинки", product.image, (value) => updateProduct(index, "image", value), { type: "url", wide: true }),
-      inputField("Описание", product.description, (value) => updateProduct(index, "description", value), { textarea: true, wide: true })
+      inputField("Описание", product.description, (value) => updateProduct(index, "description", value), { textarea: true, wide: true }),
+      inputField("Состав", product.composition, (value) => updateProduct(index, "composition", value), { textarea: true, wide: true }),
+      inputField("Масса", product.weight, (value) => updateProduct(index, "weight", value)),
+      inputField("Цена", product.price, (value) => updateProduct(index, "price", value))
     );
 
     const visible = el("label", "check-row");
