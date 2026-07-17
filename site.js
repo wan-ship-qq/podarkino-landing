@@ -30,9 +30,6 @@ const defaultContent = {};
 function productCard(product) {
   const article = document.createElement("article");
   article.className = "product-card";
-  article.tabIndex = 0;
-  article.setAttribute("role", "button");
-  article.setAttribute("aria-label", `Открыть фото: ${product.title || "Подарок"}`);
 
   const imageWrap = document.createElement("div");
   imageWrap.className = "product-img";
@@ -66,7 +63,7 @@ const imageViewer = document.createElement("div");
 imageViewer.className = "image-viewer";
 imageViewer.setAttribute("role", "dialog");
 imageViewer.setAttribute("aria-modal", "true");
-imageViewer.setAttribute("aria-label", "Фото товара");
+imageViewer.setAttribute("aria-label", "Полноэкранный просмотр фото");
 imageViewer.hidden = true;
 imageViewer.innerHTML = `
   <button class="image-viewer-close" type="button" aria-label="Закрыть фото">&times;</button>
@@ -78,10 +75,7 @@ const viewerPhoto = imageViewer.querySelector(".image-viewer-photo");
 const viewerClose = imageViewer.querySelector(".image-viewer-close");
 let lastFocusedElement = null;
 
-function openImageViewer(card) {
-  const image = card.querySelector(".product-img img");
-  if (!image) return;
-
+function openImageViewer(image) {
   lastFocusedElement = document.activeElement;
   viewerPhoto.src = image.currentSrc || image.src;
   viewerPhoto.alt = image.alt;
@@ -99,18 +93,48 @@ function closeImageViewer() {
   lastFocusedElement?.focus();
 }
 
-productsRoot?.addEventListener("click", (event) => {
-  const card = event.target.closest(".product-card");
-  if (card) openImageViewer(card);
+const viewerImageSelector = 'main img:not([data-image-viewer="off"])';
+
+function enhanceViewerImage(image) {
+  if (!image.matches(viewerImageSelector)) return;
+
+  image.classList.add("viewer-trigger");
+  image.tabIndex = 0;
+  image.setAttribute("role", "button");
+  image.setAttribute("aria-label", `Открыть фото: ${image.alt || "изображение"}`);
+}
+
+document.querySelectorAll(viewerImageSelector).forEach(enhanceViewerImage);
+
+const imageObserver = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    mutation.addedNodes.forEach((node) => {
+      if (!(node instanceof Element)) return;
+      if (node.matches(viewerImageSelector)) enhanceViewerImage(node);
+      node.querySelectorAll(viewerImageSelector).forEach(enhanceViewerImage);
+    });
+  });
 });
 
-productsRoot?.addEventListener("keydown", (event) => {
+imageObserver.observe(document.querySelector("main") || document.body, {
+  childList: true,
+  subtree: true
+});
+
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) return;
+  const image = event.target.closest(viewerImageSelector);
+  if (image) openImageViewer(image);
+});
+
+document.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
-  const card = event.target.closest(".product-card");
-  if (!card) return;
+  if (!(event.target instanceof Element)) return;
+  const image = event.target.closest(viewerImageSelector);
+  if (!image) return;
 
   event.preventDefault();
-  openImageViewer(card);
+  openImageViewer(image);
 });
 
 viewerClose.addEventListener("click", closeImageViewer);
