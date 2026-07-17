@@ -91,7 +91,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .occasion-grid article{min-height:170px;padding:22px}
 .occasion-grid span{display:block;margin-bottom:12px;font-family:"Playfair Display",Georgia,serif;font-size:28px;line-height:1;color:var(--cocoa)}
 .occasion-grid small{display:block;color:var(--muted);font-size:14px;line-height:1.45}
-.occasion-grid .teacher-occasion,.occasion-grid .child-occasion,.occasion-grid .beloved-occasion,.occasion-grid .trainer-occasion{grid-column:1/-1;padding:0;overflow:hidden}
+.occasion-grid .teacher-occasion,.occasion-grid .relatives-occasion,.occasion-grid .child-occasion,.occasion-grid .beloved-occasion,.occasion-grid .trainer-occasion{grid-column:1/-1;padding:0;overflow:hidden}
 .occasion-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:var(--paper-2)}
 .trainer-occasion .occasion-photos{grid-template-columns:repeat(2,1fr)}
 .occasion-photos img{width:100%;height:310px;object-fit:cover}
