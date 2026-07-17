@@ -1,4 +1,4 @@
-const assetVersion = "20260717-1302";
+const assetVersion = "20260717-1316";
 
 const fallbackProducts = [
   {
@@ -19,6 +19,13 @@ const fallbackProducts = [
     title: "Подарочный набор сладостей «Сердце»",
     description: "Яркий сладкий подарок для близкого человека, искреннего признания или особого повода.",
     image: "assets/sweets-heart-gift-set.jpg",
+    images: [
+      "assets/sweets-heart-detail-1.jpg",
+      "assets/sweets-heart-detail-2.jpg",
+      "assets/sweets-heart-detail-3.jpg",
+      "assets/sweets-heart-detail-4.jpg",
+      "assets/sweets-heart-detail-5.jpg"
+    ],
     badge: "новинка",
     visible: true
   },
