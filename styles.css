@@ -64,14 +64,14 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .section-head p:not(.eyebrow),.offer p,.story-card p,.final-cta p{color:var(--muted);font-size:18px}
 .product-showroom{max-width:1240px}
 .product-showroom .section-head{position:relative;z-index:2}
-.product-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:44px 28px;padding:46px 38px 64px;border:14px solid #5b331f;border-radius:22px;background:
-  radial-gradient(circle at 50% 5%,rgba(255,223,166,.24),transparent 42%),
-  repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 54px),
-  linear-gradient(100deg,#2c170e,#4a2818 48%,#29150d);
-  box-shadow:inset 0 0 0 3px #9a6037,inset 0 24px 48px rgba(0,0,0,.38),0 28px 70px rgba(58,35,24,.26);perspective:1200px}
-.product-grid:before{content:"ПОДАРКИНО  •  ВИТРИНА ПОДАРКОВ";position:absolute;left:50%;top:-30px;z-index:3;width:max-content;max-width:80%;padding:9px 24px;border:3px solid #6a3b21;border-radius:6px;background:linear-gradient(#f7e6ca,#d8ad76);color:#5a321f;font-family:"Playfair Display",Georgia,serif;font-size:14px;font-weight:700;letter-spacing:.14em;text-align:center;box-shadow:0 7px 16px rgba(38,18,9,.28);transform:translateX(-50%)}
-.product-card{position:relative;display:flex;align-items:flex-end;justify-content:center;min-width:0;height:350px;padding:28px 32px 34px 18px;border:0;border-radius:5px;background:linear-gradient(90deg,rgba(0,0,0,.2),transparent 9%,transparent 91%,rgba(0,0,0,.2)),linear-gradient(#422315,#5d341f);box-shadow:inset 0 12px 24px rgba(0,0,0,.33);overflow:visible}
-.product-card:after{content:"";position:absolute;left:-24px;right:-24px;bottom:-10px;height:24px;border-radius:3px;background:linear-gradient(#b47a47 0 18%,#744326 20% 62%,#4b2918 64%);box-shadow:0 13px 15px rgba(0,0,0,.5),inset 0 2px rgba(255,231,190,.25)}
+.product-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:54px 0;padding:40px 28px 66px;background:
+  radial-gradient(circle at 50% 0,rgba(255,221,164,.22),transparent 42%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 2px,transparent 2px 148px),
+  repeating-linear-gradient(2deg,#55311e 0 3px,#6a4028 5px 72px,#4b2a1a 74px 78px);
+  box-shadow:inset 0 22px 40px rgba(31,14,7,.25),0 24px 62px rgba(58,35,24,.2);perspective:1200px;overflow:hidden}
+.product-grid:before{display:none}
+.product-card{position:relative;display:flex;align-items:flex-end;justify-content:center;min-width:0;height:350px;padding:28px 32px 34px 18px;border:0;background:radial-gradient(ellipse at 50% 82%,rgba(24,11,5,.26),transparent 58%);box-shadow:none;overflow:visible}
+.product-card:after{content:"";position:absolute;left:-2px;right:-2px;bottom:-10px;height:25px;border-radius:2px;background:linear-gradient(#c18a55 0 15%,#89552f 18% 55%,#60371f 58% 78%,#3e2114 80%);box-shadow:0 15px 18px rgba(20,9,4,.48),inset 0 2px rgba(255,233,196,.32)}
 .product-box{position:relative;z-index:1;width:min(88%,270px);height:270px;padding:0;border:0;background:transparent;cursor:pointer;filter:drop-shadow(15px 18px 14px rgba(0,0,0,.48));transform:rotateY(-7deg);transform-origin:bottom center;transform-style:preserve-3d;transition:transform .28s ease,filter .28s ease}
 .product-box:before{content:"";position:absolute;top:8px;right:-23px;bottom:-1px;width:24px;background:linear-gradient(90deg,#845334,#4a291a);clip-path:polygon(0 0,100% 5%,100% 96%,0 100%);box-shadow:inset 4px 0 7px rgba(255,225,179,.2);transform:translateZ(-2px)}
 .product-box:after{content:"";position:absolute;left:10px;right:-22px;top:-15px;height:24px;background:linear-gradient(#c18a58,#70452d);clip-path:polygon(0 63%,91% 0,100% 38%,8% 100%);box-shadow:inset 0 2px rgba(255,238,207,.28);transform:translateZ(-1px)}
@@ -182,9 +182,9 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .offer{margin:0 18px;padding:22px;border-radius:22px}
   .offer>div{padding:0}
   .offer img{height:230px;border-radius:18px}
-  .product-grid{gap:48px;padding:42px 24px 56px;border-width:9px}
+  .product-grid{gap:48px;padding:34px 20px 56px}
   .product-card{height:340px;padding-left:22px;padding-right:38px}
-  .product-card:after{left:-16px;right:-16px}
+  .product-card:after{left:-20px;right:-20px}
   .product-box{width:min(84%,250px);height:270px}
   .product-viewer{display:block}
   .product-viewer-stage{min-height:0;padding:62px 48px 58px}
