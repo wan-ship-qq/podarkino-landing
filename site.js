@@ -62,23 +62,7 @@ function productCard(product) {
     imageWrap.append(image);
   }
 
-  const title = document.createElement("h3");
-  title.textContent = product.title || "Подарок";
-
-  const label = document.createElement("div");
-  label.className = "product-label";
-  const hint = document.createElement("small");
-  hint.textContent = "Рассмотреть набор";
-  label.append(title, hint);
-
-  if (product.badge) {
-    const badge = document.createElement("span");
-    badge.className = "product-badge";
-    badge.textContent = product.badge;
-    imageWrap.append(badge);
-  }
-
-  box.append(imageWrap, label);
+  box.append(imageWrap);
   box.addEventListener("click", () => openProductViewer(product));
   article.append(box);
   return article;
