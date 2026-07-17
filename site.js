@@ -67,21 +67,59 @@ imageViewer.setAttribute("aria-label", "Полноэкранный просмо�
 imageViewer.hidden = true;
 imageViewer.innerHTML = `
   <button class="image-viewer-close" type="button" aria-label="Закрыть фото">&times;</button>
+  <button class="image-viewer-nav image-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
   <img class="image-viewer-photo" alt="" />
+  <button class="image-viewer-nav image-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
+  <span class="image-viewer-counter" aria-live="polite"></span>
 `;
 document.body.append(imageViewer);
 
 const viewerPhoto = imageViewer.querySelector(".image-viewer-photo");
 const viewerClose = imageViewer.querySelector(".image-viewer-close");
+const viewerPrevious = imageViewer.querySelector(".image-viewer-prev");
+const viewerNext = imageViewer.querySelector(".image-viewer-next");
+const viewerCounter = imageViewer.querySelector(".image-viewer-counter");
 let lastFocusedElement = null;
+let currentViewerImage = null;
+let touchStartX = null;
+let touchStartY = null;
+
+const viewerImageSelector = 'main img:not([data-image-viewer="off"])';
+
+function getViewerImages() {
+  return [...document.querySelectorAll(viewerImageSelector)];
+}
+
+function showViewerImage(image) {
+  const images = getViewerImages();
+  const index = images.indexOf(image);
+  if (index < 0) return;
+
+  currentViewerImage = image;
+  viewerPhoto.src = image.currentSrc || image.src;
+  viewerPhoto.alt = image.alt;
+  viewerCounter.textContent = `${index + 1} / ${images.length}`;
+  const singleImage = images.length < 2;
+  viewerPrevious.hidden = singleImage;
+  viewerNext.hidden = singleImage;
+  viewerCounter.hidden = singleImage;
+}
 
 function openImageViewer(image) {
   lastFocusedElement = document.activeElement;
-  viewerPhoto.src = image.currentSrc || image.src;
-  viewerPhoto.alt = image.alt;
+  showViewerImage(image);
   imageViewer.hidden = false;
   document.body.classList.add("viewer-open");
   viewerClose.focus();
+}
+
+function navigateViewer(step) {
+  const images = getViewerImages();
+  if (images.length < 2) return;
+
+  const currentIndex = Math.max(0, images.indexOf(currentViewerImage));
+  const nextIndex = (currentIndex + step + images.length) % images.length;
+  showViewerImage(images[nextIndex]);
 }
 
 function closeImageViewer() {
@@ -89,11 +127,10 @@ function closeImageViewer() {
 
   imageViewer.hidden = true;
   viewerPhoto.removeAttribute("src");
+  currentViewerImage = null;
   document.body.classList.remove("viewer-open");
   lastFocusedElement?.focus();
 }
-
-const viewerImageSelector = 'main img:not([data-image-viewer="off"])';
 
 function enhanceViewerImage(image) {
   if (!image.matches(viewerImageSelector)) return;
@@ -138,11 +175,43 @@ document.addEventListener("keydown", (event) => {
 });
 
 viewerClose.addEventListener("click", closeImageViewer);
+viewerPrevious.addEventListener("click", () => navigateViewer(-1));
+viewerNext.addEventListener("click", () => navigateViewer(1));
 imageViewer.addEventListener("click", (event) => {
   if (event.target === imageViewer) closeImageViewer();
 });
+imageViewer.addEventListener("touchstart", (event) => {
+  if (event.touches.length !== 1) return;
+  touchStartX = event.touches[0].clientX;
+  touchStartY = event.touches[0].clientY;
+}, { passive: true });
+imageViewer.addEventListener("touchend", (event) => {
+  if (touchStartX === null || touchStartY === null || !event.changedTouches.length) return;
+
+  const deltaX = event.changedTouches[0].clientX - touchStartX;
+  const deltaY = event.changedTouches[0].clientY - touchStartY;
+  touchStartX = null;
+  touchStartY = null;
+
+  if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+    navigateViewer(deltaX < 0 ? 1 : -1);
+  }
+}, { passive: true });
+imageViewer.addEventListener("touchcancel", () => {
+  touchStartX = null;
+  touchStartY = null;
+});
 document.addEventListener("keydown", (event) => {
+  if (imageViewer.hidden) return;
   if (event.key === "Escape") closeImageViewer();
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    navigateViewer(-1);
+  }
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    navigateViewer(1);
+  }
 });
 
 function renderProducts(products) {
