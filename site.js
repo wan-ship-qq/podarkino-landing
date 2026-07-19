@@ -1,4 +1,4 @@
-const assetVersion = "20260719-1733";
+const assetVersion = "20260719-1744";
 
 const fallbackProducts = [
   {
@@ -41,7 +41,8 @@ const fallbackProducts = [
       "assets/sweets-tenderness-detail-5.jpg",
       "assets/sweets-tenderness-detail-6.jpg",
       "assets/sweets-tenderness-detail-7.jpg",
-      "assets/sweets-tenderness-detail-8.jpg"
+      "assets/sweets-tenderness-detail-8.jpg",
+      "assets/sweets-tenderness-detail-9.jpg"
     ],
     badge: "новинка",
     visible: true
