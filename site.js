@@ -1,4 +1,4 @@
-const assetVersion = "20260717-1340";
+const assetVersion = "20260719-1733";
 
 const fallbackProducts = [
   {
@@ -33,6 +33,16 @@ const fallbackProducts = [
     title: "Подарочный набор сладостей «Нежность»",
     description: "Нежный сладкий подарок для близкого человека, душевного поздравления или знака внимания.",
     image: "assets/sweets-tenderness-gift-set.jpg",
+    images: [
+      "assets/sweets-tenderness-detail-1.jpg",
+      "assets/sweets-tenderness-detail-2.jpg",
+      "assets/sweets-tenderness-detail-3.jpg",
+      "assets/sweets-tenderness-detail-4.jpg",
+      "assets/sweets-tenderness-detail-5.jpg",
+      "assets/sweets-tenderness-detail-6.jpg",
+      "assets/sweets-tenderness-detail-7.jpg",
+      "assets/sweets-tenderness-detail-8.jpg"
+    ],
     badge: "новинка",
     visible: true
   }
