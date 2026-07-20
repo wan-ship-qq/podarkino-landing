@@ -45,8 +45,6 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .btn:hover{transform:translateY(-2px)}
 .btn.primary{background:var(--caramel);color:#fff;box-shadow:0 16px 30px rgba(167,97,46,.24)}
 .btn.ghost{background:#fff;border-color:var(--line);color:var(--cocoa)}
-.people-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
-.people-row span{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--coffee);font-weight:900;font-size:13px}
 .hero-showcase{min-height:520px;display:grid;place-items:center}
 .hero-logo{position:relative;z-index:2;width:min(100%,430px);aspect-ratio:1;border-radius:50%;overflow:hidden;box-shadow:0 26px 58px rgba(58,35,24,.2)}
 .hero-logo img{width:100%;height:100%;object-fit:cover;transform:scale(1.055)}
