@@ -134,6 +134,11 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .story-card img{width:220px;height:220px;border-radius:50%;object-fit:cover;justify-self:end;box-shadow:0 18px 38px rgba(58,35,24,.14)}
 .story-card h2{max-width:780px}
 .heartline{font-weight:900;color:var(--berry)!important}
+.reviews{padding-top:34px}
+.reviews-empty{max-width:760px;margin:0 auto;padding:38px 32px;text-align:center;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(255,253,248,.96),rgba(247,234,216,.8));box-shadow:var(--shadow)}
+.reviews-stars{margin-bottom:14px;color:var(--caramel);font-size:24px;letter-spacing:.12em}
+.reviews-empty h3{margin:0 0 10px;font-family:"Playfair Display",Georgia,serif;font-size:clamp(26px,3vw,36px)}
+.reviews-empty p{max-width:590px;margin:0 auto;color:var(--muted);font-size:17px}
 .contacts{max-width:var(--max);margin:0 auto 18px;padding:54px 24px;text-align:center;border-radius:30px;background:linear-gradient(135deg,rgba(255,253,248,.96),rgba(240,219,190,.62));border:1px solid rgba(255,255,255,.75);box-shadow:var(--shadow)}
 .contacts p{max-width:680px;margin-left:auto;margin-right:auto}
 .footer{display:flex;align-items:center;justify-content:space-between;gap:18px;max-width:var(--max);margin:0 auto;padding:28px 24px 44px;color:var(--muted);border-top:1px solid var(--line)}
@@ -187,6 +192,8 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .image-viewer-counter{bottom:22px}
   .story-card{padding:26px;border-radius:22px}
   .story-card img{width:150px;height:150px}
+  .reviews{padding-top:18px}
+  .reviews-empty{padding:30px 20px;border-radius:22px}
   .contacts{margin:0 14px 18px;padding:40px 20px;border-radius:24px}
   .footer{display:grid}
 }
