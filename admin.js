@@ -18,7 +18,6 @@ const contentFields = [
   ["heroEyebrow", "Подпись над главным заголовком", "text"],
   ["heroTitle", "Главный заголовок", "textarea"],
   ["heroLead", "Текст под главным заголовком", "textarea"],
-  ["heroPrimaryButton", "Кнопка выбора", "text"],
   ["productsEyebrow", "Подпись блока товаров", "text"],
   ["productsTitle", "Заголовок блока товаров", "textarea"],
   ["productsLead", "Текст блока товаров", "textarea"],
