@@ -1,4 +1,4 @@
-const assetVersion = "20260720-1950";
+const assetVersion = "20260720-2002";
 
 const fallbackProducts = [
   {
