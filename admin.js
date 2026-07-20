@@ -11,6 +11,7 @@ const productDefaults = {
   weight: "",
   price: "",
   image: "assets/tea-sweets.jpg",
+  images: [],
   visible: true
 };
 
@@ -134,6 +135,83 @@ function inputField(labelText, value, onInput, options = {}) {
   return label;
 }
 
+function productPhotos(product) {
+  return [product.image, ...(Array.isArray(product.images) ? product.images : [])]
+    .filter((source) => typeof source === "string" && source.trim());
+}
+
+function setProductPhotos(index, photos) {
+  const [image = "", ...images] = photos;
+  products[index] = { ...products[index], image, images };
+}
+
+function moveProductPhoto(productIndex, photoIndex, direction) {
+  const photos = productPhotos(products[productIndex]);
+  const next = photoIndex + direction;
+  if (next < 0 || next >= photos.length) return;
+  [photos[photoIndex], photos[next]] = [photos[next], photos[photoIndex]];
+  setProductPhotos(productIndex, photos);
+  renderProducts();
+}
+
+function photoManager(product, productIndex) {
+  const manager = el("section", "photo-manager");
+  const heading = el("div", "photo-manager-heading");
+  heading.append(
+    el("strong", "", "Фотографии товара"),
+    el("p", "", "Первое фото — обложка. Используйте стрелки, чтобы менять фотографии местами.")
+  );
+  manager.append(heading);
+
+  const list = el("div", "photo-list");
+  const photos = productPhotos(product);
+  photos.forEach((source, photoIndex) => {
+    const item = el("div", "photo-item");
+    const image = document.createElement("img");
+    image.src = source;
+    image.alt = `${product.title || "Товар"}, фото ${photoIndex + 1}`;
+
+    const details = el("div", "photo-details");
+    const top = el("div", "photo-item-top");
+    top.append(el("strong", "", `Фото ${photoIndex + 1}`));
+    if (photoIndex === 0) top.append(el("span", "cover-badge", "Обложка"));
+
+    const sourceInput = document.createElement("input");
+    sourceInput.type = "text";
+    sourceInput.value = source;
+    sourceInput.setAttribute("aria-label", `Адрес фото ${photoIndex + 1}`);
+    sourceInput.addEventListener("input", () => {
+      image.src = sourceInput.value;
+      photos[photoIndex] = sourceInput.value;
+      setProductPhotos(productIndex, photos);
+      renderPreview();
+    });
+
+    details.append(top, sourceInput);
+
+    const actions = el("div", "photo-actions");
+    const left = el("button", "", "←");
+    left.type = "button";
+    left.title = "Переместить фото влево";
+    left.setAttribute("aria-label", `Переместить фото ${photoIndex + 1} влево`);
+    left.disabled = photoIndex === 0;
+    left.addEventListener("click", () => moveProductPhoto(productIndex, photoIndex, -1));
+
+    const right = el("button", "", "→");
+    right.type = "button";
+    right.title = "Переместить фото вправо";
+    right.setAttribute("aria-label", `Переместить фото ${photoIndex + 1} вправо`);
+    right.disabled = photoIndex === photos.length - 1;
+    right.addEventListener("click", () => moveProductPhoto(productIndex, photoIndex, 1));
+
+    actions.append(left, right);
+    item.append(image, details, actions);
+    list.append(item);
+  });
+  manager.append(list);
+  return manager;
+}
+
 function renderProducts() {
   productsEditor.replaceChildren();
 
@@ -160,7 +238,6 @@ function renderProducts() {
     const fields = el("div", "field-grid");
     fields.append(
       inputField("Название", product.title, (value) => updateProduct(index, "title", value)),
-      inputField("Фото / URL картинки", product.image, (value) => updateProduct(index, "image", value), { type: "url", wide: true }),
       inputField("Описание", product.description, (value) => updateProduct(index, "description", value), { textarea: true, wide: true }),
       inputField("Состав", product.composition, (value) => updateProduct(index, "composition", value), { textarea: true, wide: true }),
       inputField("Масса", product.weight, (value) => updateProduct(index, "weight", value)),
@@ -174,7 +251,7 @@ function renderProducts() {
     checkbox.addEventListener("change", () => updateProduct(index, "visible", checkbox.checked));
     visible.append(checkbox, el("span", "", "Показывать на сайте"));
 
-    card.append(head, fields, visible);
+    card.append(head, fields, photoManager(product, index), visible);
     productsEditor.append(card);
   });
 
