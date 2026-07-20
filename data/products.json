@@ -66,7 +66,8 @@
   {
     "title": "Подарочный набор «Настоящему мужчине»",
     "description": "Готовый подарочный набор для мужчины к празднику или как знак внимания.",
-    "image": "assets/real-man-gift-set.jpg",
+    "image": "assets/real-man-box-3d.png?v=20260720-1950",
+    "viewerImage": "assets/real-man-box-full.jpg?v=20260720-1950",
     "images": [
       "assets/real-man-detail-1.jpg",
       "assets/real-man-detail-2.jpg",
