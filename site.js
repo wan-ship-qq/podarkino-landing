@@ -1,10 +1,11 @@
-const assetVersion = "20260720-1837";
+const assetVersion = "20260720-1855";
 
 const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
     image: "assets/nuts-in-chocolate-box-3d.png?v=20260720-1837",
+    viewerImage: "assets/nuts-in-chocolate-box-full.jpg?v=20260720-1855",
     images: [
       "assets/nuts-in-chocolate-detail-1.jpg",
       "assets/nuts-in-chocolate-detail-2.jpg",
@@ -133,7 +134,7 @@ function showProductImage(index) {
 
 function openProductViewer(product) {
   productLastFocusedElement = document.activeElement;
-  const sources = [product.image, ...(Array.isArray(product.images) ? product.images : [])].filter(Boolean);
+  const sources = [product.viewerImage || product.image, ...(Array.isArray(product.images) ? product.images : [])].filter(Boolean);
   activeProductImages = sources.map((src, index) => ({
     src,
     alt: `${product.title || "Подарочный набор"}${index ? `, фото ${index + 1}` : ""}`
