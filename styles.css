@@ -119,11 +119,15 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .image-viewer-next{right:18px}
 .image-viewer-counter{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));z-index:1;padding:7px 12px;border-radius:999px;background:rgba(20,12,8,.7);color:#fff;font-size:14px;font-weight:800;transform:translateX(-50%)}
 .image-viewer-close:focus-visible,.image-viewer-nav:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
-.offer{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:center;max-width:var(--max);margin:0 auto;padding:34px 24px;border-radius:28px;background:linear-gradient(105deg,#fffdf8,rgba(239,216,185,.76));border:1px solid rgba(255,255,255,.72);box-shadow:var(--shadow)}
-.offer>div{padding:22px 8px 22px 18px}
+.offer{max-width:var(--max);margin:0 auto;padding:34px 24px;border-radius:28px;background:linear-gradient(105deg,#fffdf8,rgba(239,216,185,.76));border:1px solid rgba(255,255,255,.72);box-shadow:var(--shadow)}
+.offer-lead{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:center}
+.offer-lead>div{padding:22px 8px 22px 18px}
 .offer p{max-width:560px}
 .offer .btn{margin-top:10px}
-.offer img{width:100%;height:300px;object-fit:cover;border-radius:22px}
+.offer-lead>img{width:100%;height:300px;object-fit:cover;border-radius:22px}
+.offer-benefits{margin-top:34px;padding-top:34px;border-top:1px solid rgba(101,61,37,.16)}
+.offer-benefits .section-head{margin-bottom:24px}
+.offer-benefits .benefit-grid article{background:rgba(255,255,255,.56)}
 .occasion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .occasion-grid article{min-height:170px;padding:22px}
 .occasion-grid span{display:block;margin-bottom:12px;font-family:"Playfair Display",Georgia,serif;font-size:28px;line-height:1;color:var(--cocoa)}
@@ -159,7 +163,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .hero-showcase{min-height:470px}
   .feature-strip,.product-grid,.benefit-grid{grid-template-columns:1fr 1fr}
   .feature-strip article:first-child{grid-column:1/-1}
-  .offer,.story-card{grid-template-columns:1fr}
+  .offer-lead,.story-card{grid-template-columns:1fr}
   .occasion-grid{grid-template-columns:repeat(3,1fr)}
   .story-card img{justify-self:start}
 }
@@ -181,8 +185,9 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .section{padding:58px 18px}
   .section-head.centered{text-align:left}
   .offer{margin:0 18px;padding:22px;border-radius:22px}
-  .offer>div{padding:0}
-  .offer img{height:230px;border-radius:18px}
+  .offer-lead>div{padding:0}
+  .offer-lead>img{height:230px;border-radius:18px}
+  .offer-benefits{margin-top:28px;padding-top:28px}
   .product-grid{gap:48px;padding:34px 20px 56px}
   .product-card{height:340px;padding-left:22px;padding-right:38px}
   .product-card:after{left:-20px;right:-20px}
