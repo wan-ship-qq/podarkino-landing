@@ -1,4 +1,4 @@
-const assetVersion = "20260720-1907";
+const assetVersion = "20260720-1925";
 
 const fallbackProducts = [
   {
@@ -34,7 +34,8 @@ const fallbackProducts = [
   {
     title: "Подарочный набор сладостей «Нежность»",
     description: "Нежный сладкий подарок для близкого человека, душевного поздравления или знака внимания.",
-    image: "assets/sweets-tenderness-gift-set.jpg",
+    image: "assets/sweets-tenderness-box-3d.png?v=20260720-1925",
+    viewerImage: "assets/sweets-tenderness-box-full.jpg?v=20260720-1925",
     images: [
       "assets/sweets-tenderness-detail-1.jpg",
       "assets/sweets-tenderness-detail-2.jpg",
