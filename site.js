@@ -1,10 +1,10 @@
-const assetVersion = "20260719-1749";
+const assetVersion = "20260720-1837";
 
 const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
-    image: "assets/nuts-in-chocolate-product-main.jpg?v=20260716-1800",
+    image: "assets/nuts-in-chocolate-box-3d.png?v=20260720-1837",
     images: [
       "assets/nuts-in-chocolate-detail-1.jpg",
       "assets/nuts-in-chocolate-detail-2.jpg",
@@ -58,6 +58,7 @@ function productCard(product) {
 
   const box = document.createElement("button");
   box.className = "product-box";
+  if (product.image?.includes("box-3d")) box.classList.add("product-box--cutout");
   box.type = "button";
   box.setAttribute("aria-label", `Открыть набор: ${product.title || "Подарок"}`);
 

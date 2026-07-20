@@ -72,12 +72,18 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .product-box{position:relative;z-index:1;width:min(88%,270px);height:270px;padding:0;border:0;background:transparent;cursor:pointer;filter:drop-shadow(15px 18px 14px rgba(0,0,0,.48));transform:rotateY(-7deg);transform-origin:bottom center;transform-style:preserve-3d;transition:transform .28s ease,filter .28s ease}
 .product-box:before{content:"";position:absolute;top:8px;right:-23px;bottom:-1px;width:24px;background:linear-gradient(90deg,#845334,#4a291a);clip-path:polygon(0 0,100% 5%,100% 96%,0 100%);box-shadow:inset 4px 0 7px rgba(255,225,179,.2);transform:translateZ(-2px)}
 .product-box:after{content:"";position:absolute;left:10px;right:-22px;top:-15px;height:24px;background:linear-gradient(#c18a58,#70452d);clip-path:polygon(0 63%,91% 0,100% 38%,8% 100%);box-shadow:inset 0 2px rgba(255,238,207,.28);transform:translateZ(-1px)}
+.product-box--cutout{filter:drop-shadow(15px 20px 13px rgba(0,0,0,.5));transform:none}
+.product-box--cutout:before,.product-box--cutout:after{display:none}
+.product-box.product-box--cutout:hover,.product-box.product-box--cutout:focus-visible{filter:drop-shadow(18px 25px 16px rgba(0,0,0,.55));transform:translateY(-11px) scale(1.035)}
+.product-box--cutout .product-img{overflow:visible;border:0;background:transparent;box-shadow:none}
+.product-box--cutout .product-img:after{display:none}
+.product-box--cutout .product-img img{--preview-scale:1.25;--preview-x:0;--preview-y:0;object-fit:contain;object-position:center}
 .product-box:hover,.product-box:focus-visible{filter:drop-shadow(17px 25px 17px rgba(0,0,0,.55));transform:translateY(-11px) rotateY(-2deg) scale(1.035);outline:none}
 .product-box:focus-visible .product-img{outline:3px solid #e3b97f;outline-offset:4px}
 .product-img{position:relative;width:100%;height:100%;border:2px solid #93613f;border-radius:7px 3px 3px 7px;background:var(--paper-2);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
 .product-img:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,rgba(255,255,255,.2),transparent 25%,transparent 72%,rgba(45,22,11,.18));pointer-events:none}
 .product-img img{--preview-scale:1.75;--preview-x:0;--preview-y:-8%;width:100%;height:100%;object-fit:cover;object-position:50% 56%;transform:translate(var(--preview-x),var(--preview-y)) scale(var(--preview-scale));transition:.3s ease}
-.product-img img[src*="nuts-in-chocolate-product-main"]{--preview-scale:1.75;--preview-y:-10%;object-position:50% 56%}
+.product-img img[src*="nuts-in-chocolate-box-3d"]{--preview-scale:1.25;--preview-y:0;object-position:center}
 .product-img img[src*="sweets-heart-gift-set"]{--preview-scale:2;--preview-y:-30%;object-position:47% 59%}
 .product-img img[src*="sweets-tenderness-gift-set"]{--preview-scale:1.8;--preview-y:-24%;object-position:50% 57%}
 .product-img img[src*="sweets-happy-birthday-gift-set"]{--preview-scale:1.18;object-position:50% 55%}
