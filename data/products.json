@@ -139,6 +139,11 @@
     "title": "Большой Подарочный набор чая и сладостей",
     "description": "Большой набор чая и сладостей для семьи, праздника или особого повода.",
     "image": "assets/large-tea-and-sweets-gift-set.jpg",
+    "images": [
+      "assets/large-tea-and-sweets-detail-1.jpg",
+      "assets/large-tea-and-sweets-detail-2.jpg",
+      "assets/large-tea-and-sweets-detail-3.jpg"
+    ],
     "badge": "большой набор",
     "visible": true
   }
