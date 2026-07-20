@@ -114,7 +114,8 @@
   {
     "title": "Подарочный набор чая Ягодный",
     "description": "Ароматный ягодный чай в подарочной коробке для уютного чаепития.",
-    "image": "assets/berry-tea-gift-set.jpg",
+    "image": "assets/berry-tea-box-3d.png?v=20260720-2021",
+    "viewerImage": "assets/berry-tea-box-full.jpg?v=20260720-2021",
     "images": [
       "assets/berry-tea-detail-1.jpg",
       "assets/berry-tea-detail-2.jpg",
@@ -130,7 +131,8 @@
   {
     "title": "Подарочный набор чая и сладостей",
     "description": "Чай и сладости в подарочной коробке для поздравления и приятного чаепития.",
-    "image": "assets/tea-and-sweets-gift-set.jpg",
+    "image": "assets/tea-and-sweets-box-3d.png?v=20260720-2021",
+    "viewerImage": "assets/tea-and-sweets-box-full.jpg?v=20260720-2021",
     "images": [
       "assets/tea-and-sweets-detail-1.jpg",
       "assets/tea-and-sweets-detail-2.jpg",
