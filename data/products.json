@@ -51,7 +51,8 @@
   {
     "title": "Подарочный набор сладостей «С днём рождения!»",
     "description": "Праздничный набор сладостей для душевного поздравления с днём рождения.",
-    "image": "assets/sweets-happy-birthday-gift-set.jpg",
+    "image": "assets/sweets-birthday-box-3d.png?v=20260720-1941",
+    "viewerImage": "assets/sweets-birthday-box-full.jpg?v=20260720-1941",
     "images": [
       "assets/sweets-happy-birthday-detail-1.jpg",
       "assets/sweets-happy-birthday-detail-2.jpg",
