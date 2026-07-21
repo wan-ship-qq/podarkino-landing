@@ -1,8 +1,5 @@
-const OWNER = "wan-ship-qq";
-const REPO = "podarkino-landing";
-const BRANCH = "main";
-const PRODUCT_PATH = "data/products.json";
-const CONTENT_PATH = "data/content.json";
+const API_URL = "https://podarkino-admin-api.wannahi459.workers.dev";
+const SESSION_KEY = "podarkinoAdminSession";
 
 const productDefaults = {
   title: "Новый товар",
@@ -34,8 +31,12 @@ const contentFields = [
 let products = [];
 let content = {};
 
-const tokenInput = document.querySelector("#token");
-const rememberInput = document.querySelector("#remember-token");
+const loginPanel = document.querySelector("#login-panel");
+const loginForm = document.querySelector("#login-form");
+const passwordInput = document.querySelector("#password");
+const loginStatus = document.querySelector("#login-status");
+const publishPanel = document.querySelector("#publish-panel");
+const editor = document.querySelector("#editor");
 const statusEl = document.querySelector("#status");
 const productsEditor = document.querySelector("#products-editor");
 const productsPreview = document.querySelector("#products-preview");
@@ -46,75 +47,36 @@ function setStatus(message, type = "") {
   statusEl.className = `status ${type}`.trim();
 }
 
-function token() {
-  return tokenInput.value.trim();
+function sessionToken() {
+  return sessionStorage.getItem(SESSION_KEY) || "";
 }
 
-function headers(authToken = token()) {
-  const result = {
-    Accept: "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28"
-  };
-  if (authToken) result.Authorization = `Bearer ${authToken}`;
-  return result;
-}
-
-function apiUrl(path) {
-  return `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
-}
-
-function toBase64(value) {
-  const bytes = new TextEncoder().encode(value);
-  let binary = "";
-  bytes.forEach((byte) => {
-    binary += String.fromCharCode(byte);
-  });
-  return btoa(binary);
-}
-
-function fromBase64(value) {
-  const binary = atob(value.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
-
-async function fetchJson(path) {
-  const response = await fetch(path, { cache: "no-store" });
-  if (!response.ok) throw new Error(`Не удалось загрузить ${path}`);
-  return response.json();
-}
-
-async function fetchFromGithub(path) {
-  const response = await fetch(`${apiUrl(path)}?ref=${BRANCH}`, { headers: headers() });
-  if (!response.ok) throw new Error(`GitHub не отдал ${path}`);
-  const file = await response.json();
-  return {
-    sha: file.sha,
-    data: JSON.parse(fromBase64(file.content))
-  };
-}
-
-async function saveToGithub(path, data, message) {
-  const current = await fetchFromGithub(path);
-  const body = {
-    message,
-    branch: BRANCH,
-    sha: current.sha,
-    content: toBase64(`${JSON.stringify(data, null, 2)}\n`)
-  };
-  const response = await fetch(apiUrl(path), {
-    method: "PUT",
-    headers: {
-      ...headers(),
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(body)
-  });
+async function apiRequest(path, options = {}) {
+  const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+  if (sessionToken()) headers.Authorization = `Bearer ${sessionToken()}`;
+  const response = await fetch(`${API_URL}${path}`, { ...options, headers, cache: "no-store" });
+  const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || `Не удалось сохранить ${path}`);
+    if (response.status === 401 && path !== "/login") showLogin("Сессия завершена. Войдите снова.");
+    throw new Error(body.error || "Сервер не ответил");
   }
-  return response.json();
+  return body;
+}
+
+function showLogin(message = "") {
+  sessionStorage.removeItem(SESSION_KEY);
+  loginPanel.hidden = false;
+  publishPanel.hidden = true;
+  editor.hidden = true;
+  loginStatus.textContent = message;
+  loginStatus.className = `status ${message ? "error" : ""}`.trim();
+  passwordInput.value = "";
+}
+
+function showEditor() {
+  loginPanel.hidden = true;
+  publishPanel.hidden = false;
+  editor.hidden = false;
 }
 
 function el(tag, className, text) {
@@ -314,19 +276,9 @@ function renderContent() {
 async function loadData() {
   setStatus("Загружаю данные...");
   try {
-    if (token()) {
-      const [productsFile, contentFile] = await Promise.all([
-        fetchFromGithub(PRODUCT_PATH),
-        fetchFromGithub(CONTENT_PATH)
-      ]);
-      products = productsFile.data;
-      content = contentFile.data;
-    } else {
-      [products, content] = await Promise.all([
-        fetchJson(PRODUCT_PATH),
-        fetchJson(CONTENT_PATH)
-      ]);
-    }
+    const data = await apiRequest("/data");
+    products = data.products;
+    content = data.content;
     renderProducts();
     renderContent();
     setStatus("Данные загружены.", "ok");
@@ -336,18 +288,37 @@ async function loadData() {
 }
 
 async function saveData() {
-  if (!token()) {
-    setStatus("Для публикации нужен GitHub token с правом contents:write.", "error");
-    return;
-  }
-
-  setStatus("Сохраняю изменения в GitHub...");
+  setStatus("Сохраняю изменения на сайте...");
   try {
-    await saveToGithub(PRODUCT_PATH, products, "Update products from site admin");
-    await saveToGithub(CONTENT_PATH, content, "Update content from site admin");
-    setStatus("Готово. GitHub Pages обновит сайт через несколько минут.", "ok");
+    await apiRequest("/data", {
+      method: "PUT",
+      body: JSON.stringify({ products, content })
+    });
+    setStatus("Готово. Сайт обновится через несколько минут.", "ok");
   } catch (error) {
     setStatus(error.message, "error");
+  }
+}
+
+async function login(event) {
+  event.preventDefault();
+  const password = passwordInput.value;
+  if (!password) return;
+  loginStatus.textContent = "Проверяю пароль…";
+  loginStatus.className = "status";
+  try {
+    const data = await apiRequest("/login", {
+      method: "POST",
+      body: JSON.stringify({ password })
+    });
+    sessionStorage.setItem(SESSION_KEY, data.token);
+    passwordInput.value = "";
+    showEditor();
+    await loadData();
+  } catch (error) {
+    loginStatus.textContent = error.message;
+    loginStatus.className = "status error";
+    passwordInput.select();
   }
 }
 
@@ -362,26 +333,15 @@ function setupTabs() {
   });
 }
 
-function setupTokenStorage() {
-  const stored = localStorage.getItem("podarkinoAdminToken");
-  if (stored) {
-    tokenInput.value = stored;
-    rememberInput.checked = true;
-  }
-
-  rememberInput.addEventListener("change", () => {
-    if (!rememberInput.checked) localStorage.removeItem("podarkinoAdminToken");
-    if (rememberInput.checked && token()) localStorage.setItem("podarkinoAdminToken", token());
-  });
-
-  tokenInput.addEventListener("input", () => {
-    if (rememberInput.checked) localStorage.setItem("podarkinoAdminToken", token());
-  });
-}
-
 document.querySelector("#add-product").addEventListener("click", addProduct);
 document.querySelector("#reload").addEventListener("click", loadData);
 document.querySelector("#save").addEventListener("click", saveData);
+document.querySelector("#logout").addEventListener("click", () => showLogin());
+loginForm.addEventListener("submit", login);
 setupTabs();
-setupTokenStorage();
-loadData();
+if (sessionToken()) {
+  showEditor();
+  loadData();
+} else {
+  showLogin();
+}

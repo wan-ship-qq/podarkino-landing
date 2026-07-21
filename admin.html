@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css?v=20260720-1825" />
+  <link rel="stylesheet" href="admin.css?v=20260721-0211" />
 </head>
 <body>
   <header class="admin-header">
@@ -20,20 +20,31 @@
   </header>
 
   <main class="admin-shell">
-    <section class="publish-panel" aria-label="Публикация">
-      <label>
-        GitHub token
-        <input type="password" id="token" autocomplete="off" placeholder="ghp_..." />
-      </label>
-      <label class="check-row">
-        <input type="checkbox" id="remember-token" />
-        <span>Запомнить в этом браузере</span>
-      </label>
-      <button class="primary" type="button" id="save">Сохранить на сайте</button>
-      <button type="button" id="reload">Обновить данные</button>
-      <p class="status" id="status" role="status">Данные загружены из файлов сайта.</p>
+    <section class="login-panel" id="login-panel" aria-label="Вход в редактор">
+      <div>
+        <p class="eyebrow">закрытый доступ</p>
+        <h2>Вход в редактор</h2>
+        <p class="login-lead">Введите пароль администратора. GitHub-токен больше не нужен.</p>
+      </div>
+      <form class="login-form" id="login-form">
+        <label>
+          Пароль
+          <input type="password" id="password" autocomplete="current-password" required />
+        </label>
+        <button class="primary" type="submit">Войти</button>
+      </form>
+      <p class="status" id="login-status" role="status"></p>
     </section>
 
+    <section class="publish-panel" id="publish-panel" aria-label="Публикация" hidden>
+      <div class="auth-state"><span class="auth-dot"></span>Вход выполнен</div>
+      <button class="primary" type="button" id="save">Сохранить на сайте</button>
+      <button type="button" id="reload">Обновить данные</button>
+      <button type="button" id="logout">Выйти</button>
+      <p class="status" id="status" role="status">Загружаю данные…</p>
+    </section>
+
+    <div id="editor" hidden>
     <section class="tabs" aria-label="Разделы редактора">
       <button class="tab active" type="button" data-tab="products">Товары</button>
       <button class="tab" type="button" data-tab="content">Тексты</button>
@@ -65,8 +76,9 @@
       </div>
       <div class="content-editor" id="content-editor"></div>
     </section>
+    </div>
   </main>
 
-  <script src="admin.js?v=20260720-1825" defer></script>
+  <script src="admin.js?v=20260721-0211" defer></script>
 </body>
 </html>
