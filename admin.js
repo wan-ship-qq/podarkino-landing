@@ -13,12 +13,9 @@ const productDefaults = {
 };
 
 const contentFields = [
-  ["heroEyebrow", "Подпись над главным заголовком", "text"],
   ["heroTitle", "Главный заголовок", "textarea"],
   ["heroLead", "Текст под главным заголовком", "textarea"],
-  ["productsEyebrow", "Подпись блока товаров", "text"],
   ["productsTitle", "Заголовок блока товаров", "textarea"],
-  ["productsLead", "Текст блока товаров", "textarea"],
   ["storyTitle", "Заголовок истории", "textarea"],
   ["storyText", "Текст истории", "textarea"],
   ["footerText", "Текст в подвале", "textarea"]
@@ -513,7 +510,8 @@ function renderContent() {
       content[key] = value;
     }, {
       type: type === "url" ? "url" : "text",
-      textarea: type === "textarea"
+      textarea: type === "textarea",
+      wide: type === "textarea"
     }));
   });
 }
@@ -684,9 +682,6 @@ function setupTabs() {
 }
 
 document.querySelector("#add-product").addEventListener("click", addProduct);
-document.querySelector("#reload").addEventListener("click", () => {
-  if (!isDirty || window.confirm("Загрузить данные заново? Несохранённые изменения пропадут.")) loadData();
-});
 document.querySelector("#save").addEventListener("click", saveData);
 document.querySelector("#logout").addEventListener("click", () => {
   if (!isDirty || window.confirm("Выйти без сохранения изменений?")) showLogin();
