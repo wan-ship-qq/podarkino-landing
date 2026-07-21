@@ -21,16 +21,16 @@ const contentFields = [
   ["productsLead", "Текст блока товаров", "textarea"],
   ["storyTitle", "Заголовок истории", "textarea"],
   ["storyText", "Текст истории", "textarea"],
-  ["finalEyebrow", "Подпись финального блока", "text"],
-  ["finalTitle", "Заголовок финального блока", "textarea"],
-  ["finalText", "Текст финального блока", "textarea"],
-  ["finalButton", "Финальная кнопка", "text"],
   ["footerText", "Текст в подвале", "textarea"]
 ];
 
 let products = [];
 let content = {};
 let pendingUploads = 0;
+let isDirty = false;
+let expandedProductIndex = null;
+let lastDeletedProduct = null;
+let draggedPhoto = null;
 
 const loginPanel = document.querySelector("#login-panel");
 const loginForm = document.querySelector("#login-form");
@@ -42,7 +42,21 @@ const statusEl = document.querySelector("#status");
 const productsEditor = document.querySelector("#products-editor");
 const productsPreview = document.querySelector("#products-preview");
 const contentEditor = document.querySelector("#content-editor");
+const reviewsEditor = document.querySelector("#reviews-editor");
+const contactsEditor = document.querySelector("#contacts-editor");
 const saveButton = document.querySelector("#save");
+const undoDeleteButton = document.querySelector("#undo-delete");
+
+function markDirty() {
+  isDirty = true;
+  saveButton.textContent = "Сохранить изменения";
+  setStatus("Есть несохранённые изменения.");
+}
+
+function markSaved() {
+  isDirty = false;
+  saveButton.textContent = "Сохранить на сайте";
+}
 
 function setStatus(message, type = "") {
   statusEl.textContent = message;
@@ -94,7 +108,10 @@ function inputField(labelText, value, onInput, options = {}) {
   const field = options.textarea ? document.createElement("textarea") : document.createElement("input");
   if (!options.textarea) field.type = options.type || "text";
   field.value = value || "";
-  field.addEventListener("input", () => onInput(field.value));
+  field.addEventListener("input", () => {
+    onInput(field.value);
+    markDirty();
+  });
   label.append(field);
   return label;
 }
@@ -115,6 +132,17 @@ function moveProductPhoto(productIndex, photoIndex, direction) {
   if (next < 0 || next >= photos.length) return;
   [photos[photoIndex], photos[next]] = [photos[next], photos[photoIndex]];
   setProductPhotos(productIndex, photos);
+  markDirty();
+  renderProducts();
+}
+
+function makeProductPhotoCover(productIndex, photoIndex) {
+  if (photoIndex === 0) return;
+  const photos = productPhotos(products[productIndex]);
+  const [cover] = photos.splice(photoIndex, 1);
+  photos.unshift(cover);
+  setProductPhotos(productIndex, photos);
+  markDirty();
   renderProducts();
 }
 
@@ -122,6 +150,7 @@ function removeProductPhoto(productIndex, photoIndex) {
   const photos = productPhotos(products[productIndex]);
   photos.splice(photoIndex, 1);
   setProductPhotos(productIndex, photos);
+  markDirty();
   renderProducts();
 }
 
@@ -190,6 +219,7 @@ async function addProductPhotos(productIndex, files) {
     for (const file of files) {
       photos.push(await uploadPhoto(file));
       setProductPhotos(productIndex, photos);
+      markDirty();
     }
   } catch (error) {
     setStatus(error.message, "error");
@@ -203,6 +233,7 @@ async function replaceProductPhoto(productIndex, photoIndex, file) {
     const photos = productPhotos(products[productIndex]);
     photos[photoIndex] = await uploadPhoto(file);
     setProductPhotos(productIndex, photos);
+    markDirty();
     renderProducts();
   } catch (error) {
     setStatus(error.message, "error");
@@ -242,6 +273,27 @@ function photoManager(product, productIndex) {
   const photos = productPhotos(product);
   photos.forEach((source, photoIndex) => {
     const item = el("div", "photo-item");
+    item.draggable = true;
+    item.addEventListener("dragstart", () => {
+      draggedPhoto = { productIndex, photoIndex };
+      item.classList.add("dragging");
+    });
+    item.addEventListener("dragend", () => {
+      draggedPhoto = null;
+      item.classList.remove("dragging");
+    });
+    item.addEventListener("dragover", (event) => event.preventDefault());
+    item.addEventListener("drop", (event) => {
+      event.preventDefault();
+      if (!draggedPhoto || draggedPhoto.productIndex !== productIndex || draggedPhoto.photoIndex === photoIndex) return;
+      const reordered = productPhotos(products[productIndex]);
+      const [moved] = reordered.splice(draggedPhoto.photoIndex, 1);
+      reordered.splice(photoIndex, 0, moved);
+      setProductPhotos(productIndex, reordered);
+      draggedPhoto = null;
+      markDirty();
+      renderProducts();
+    });
     const image = document.createElement("img");
     image.src = source;
     image.alt = `${product.title || "Товар"}, фото ${photoIndex + 1}`;
@@ -259,6 +311,7 @@ function photoManager(product, productIndex) {
       image.src = sourceInput.value;
       photos[photoIndex] = sourceInput.value;
       setProductPhotos(productIndex, photos);
+      markDirty();
       renderPreview();
     });
 
@@ -286,6 +339,11 @@ function photoManager(product, productIndex) {
     });
     replace.addEventListener("click", () => replacePicker.click());
 
+    const cover = el("button", "photo-cover", "Обложка");
+    cover.type = "button";
+    cover.hidden = photoIndex === 0;
+    cover.addEventListener("click", () => makeProductPhotoCover(productIndex, photoIndex));
+
     const remove = el("button", "danger photo-remove", "Удалить");
     remove.type = "button";
     remove.addEventListener("click", () => {
@@ -294,7 +352,7 @@ function photoManager(product, productIndex) {
       }
     });
 
-    actions.append(left, right, replace, replacePicker, remove);
+    actions.append(left, right, cover, replace, replacePicker, remove);
     item.append(image, details, actions);
     list.append(item);
   });
@@ -306,9 +364,17 @@ function renderProducts() {
   productsEditor.replaceChildren();
 
   products.forEach((product, index) => {
-    const card = el("article", `product-editor ${product.visible === false ? "off" : ""}`);
+    const expanded = expandedProductIndex === index;
+    const card = el("article", `product-editor ${product.visible === false ? "off" : ""} ${expanded ? "expanded" : "collapsed"}`);
     const head = el("div", "product-editor-head");
-    head.append(el("div", "product-editor-title", `${index + 1}. ${product.title || "Без названия"}`));
+    const toggle = el("button", "product-toggle", `${index + 1}. ${product.title || "Без названия"}`);
+    toggle.type = "button";
+    toggle.setAttribute("aria-expanded", String(expanded));
+    toggle.addEventListener("click", () => {
+      expandedProductIndex = expanded ? null : index;
+      renderProducts();
+    });
+    head.append(toggle);
 
     const actions = el("div", "product-actions");
     const up = el("button", "", "↑");
@@ -319,10 +385,13 @@ function renderProducts() {
     down.type = "button";
     down.disabled = index === products.length - 1;
     down.addEventListener("click", () => moveProduct(index, 1));
+    const duplicate = el("button", "", "Копировать");
+    duplicate.type = "button";
+    duplicate.addEventListener("click", () => duplicateProduct(index));
     const remove = el("button", "danger", "Удалить");
     remove.type = "button";
     remove.addEventListener("click", () => removeProduct(index));
-    actions.append(up, down, remove);
+    actions.append(up, down, duplicate, remove);
     head.append(actions);
 
     const fields = el("div", "field-grid");
@@ -341,7 +410,10 @@ function renderProducts() {
     checkbox.addEventListener("change", () => updateProduct(index, "visible", checkbox.checked));
     visible.append(checkbox, el("span", "", "Показывать на сайте"));
 
-    card.append(head, fields, photoManager(product, index), visible);
+    const body = el("div", "product-editor-body");
+    body.hidden = !expanded;
+    body.append(fields, photoManager(product, index), visible);
+    card.append(head, body);
     productsEditor.append(card);
   });
 
@@ -362,6 +434,21 @@ function renderPreview() {
     const body = el("div", "preview-body");
     body.append(el("h4", "", product.title || "Без названия"));
     body.append(el("p", "", product.description || ""));
+    const facts = el("div", "preview-facts");
+    facts.append(
+      el("span", "", `Цена: ${product.price || "не указана"}`),
+      el("span", "", `Масса: ${product.weight || "не указана"}`),
+      el("span", "", `Состав: ${product.composition || "не указан"}`)
+    );
+    body.append(facts);
+    const gallery = el("div", "preview-gallery");
+    [product.viewerImage || product.image, ...(product.images || [])].filter(Boolean).slice(0, 6).forEach((source) => {
+      const thumb = document.createElement("img");
+      thumb.src = source;
+      thumb.alt = "";
+      gallery.append(thumb);
+    });
+    if (gallery.childElementCount) body.append(gallery);
     card.append(imageWrap, body);
     productsPreview.append(card);
   });
@@ -369,6 +456,7 @@ function renderPreview() {
 
 function updateProduct(index, key, value) {
   products[index] = { ...products[index], [key]: value };
+  markDirty();
   renderPreview();
 }
 
@@ -376,16 +464,45 @@ function moveProduct(index, direction) {
   const next = index + direction;
   if (next < 0 || next >= products.length) return;
   [products[index], products[next]] = [products[next], products[index]];
+  if (expandedProductIndex === index) expandedProductIndex = next;
+  else if (expandedProductIndex === next) expandedProductIndex = index;
+  markDirty();
   renderProducts();
 }
 
 function removeProduct(index) {
+  if (!window.confirm(`Удалить товар «${products[index].title || "Без названия"}»?`)) return;
+  lastDeletedProduct = { product: products[index], index };
   products.splice(index, 1);
+  expandedProductIndex = null;
+  undoDeleteButton.hidden = false;
+  markDirty();
+  renderProducts();
+}
+
+function undoProductDelete() {
+  if (!lastDeletedProduct) return;
+  products.splice(lastDeletedProduct.index, 0, lastDeletedProduct.product);
+  expandedProductIndex = lastDeletedProduct.index;
+  lastDeletedProduct = null;
+  undoDeleteButton.hidden = true;
+  markDirty();
+  renderProducts();
+}
+
+function duplicateProduct(index) {
+  const copy = JSON.parse(JSON.stringify(products[index]));
+  copy.title = `${copy.title || "Товар"} — копия`;
+  products.splice(index + 1, 0, copy);
+  expandedProductIndex = index + 1;
+  markDirty();
   renderProducts();
 }
 
 function addProduct() {
   products.push({ ...productDefaults });
+  expandedProductIndex = products.length - 1;
+  markDirty();
   renderProducts();
 }
 
@@ -401,14 +518,112 @@ function renderContent() {
   });
 }
 
+function reviewImages() {
+  return Array.isArray(content.reviews) ? content.reviews : [];
+}
+
+function moveReview(index, direction) {
+  const reviews = reviewImages();
+  const next = index + direction;
+  if (next < 0 || next >= reviews.length) return;
+  [reviews[index], reviews[next]] = [reviews[next], reviews[index]];
+  content.reviews = reviews;
+  markDirty();
+  renderReviewsAdmin();
+}
+
+async function addReviews(files) {
+  try {
+    const reviews = reviewImages();
+    for (const file of files) reviews.push(await uploadPhoto(file));
+    content.reviews = reviews;
+    markDirty();
+  } catch (error) {
+    setStatus(error.message, "error");
+  } finally {
+    renderReviewsAdmin();
+  }
+}
+
+function renderReviewsAdmin() {
+  reviewsEditor.replaceChildren();
+  const reviews = reviewImages();
+  if (!reviews.length) {
+    reviewsEditor.append(el("p", "empty-note", "Отзывы ещё не загружены."));
+    return;
+  }
+  reviews.forEach((source, index) => {
+    const item = el("div", "review-admin-item");
+    item.draggable = true;
+    item.addEventListener("dragstart", () => {
+      draggedPhoto = { reviewIndex: index };
+      item.classList.add("dragging");
+    });
+    item.addEventListener("dragend", () => {
+      draggedPhoto = null;
+      item.classList.remove("dragging");
+    });
+    item.addEventListener("dragover", (event) => event.preventDefault());
+    item.addEventListener("drop", (event) => {
+      event.preventDefault();
+      if (draggedPhoto?.reviewIndex === undefined || draggedPhoto.reviewIndex === index) return;
+      const reordered = reviewImages();
+      const [moved] = reordered.splice(draggedPhoto.reviewIndex, 1);
+      reordered.splice(index, 0, moved);
+      content.reviews = reordered;
+      draggedPhoto = null;
+      markDirty();
+      renderReviewsAdmin();
+    });
+    const image = document.createElement("img");
+    image.src = source;
+    image.alt = `Отзыв ${index + 1}`;
+    const label = el("strong", "", `Отзыв ${index + 1}`);
+    const actions = el("div", "review-admin-actions");
+    const left = el("button", "", "←");
+    left.type = "button";
+    left.disabled = index === 0;
+    left.addEventListener("click", () => moveReview(index, -1));
+    const right = el("button", "", "→");
+    right.type = "button";
+    right.disabled = index === reviews.length - 1;
+    right.addEventListener("click", () => moveReview(index, 1));
+    const remove = el("button", "danger", "Удалить");
+    remove.type = "button";
+    remove.addEventListener("click", () => {
+      if (!window.confirm("Удалить этот отзыв?")) return;
+      reviews.splice(index, 1);
+      content.reviews = reviews;
+      markDirty();
+      renderReviewsAdmin();
+    });
+    actions.append(left, right, remove);
+    item.append(image, label, actions);
+    reviewsEditor.append(item);
+  });
+}
+
+function renderContacts() {
+  contactsEditor.replaceChildren(
+    inputField("Заголовок", content.contactsTitle, (value) => { content.contactsTitle = value; }),
+    inputField("Текст", content.contactsText, (value) => { content.contactsText = value; }, { textarea: true, wide: true })
+  );
+}
+
 async function loadData() {
   setStatus("Загружаю данные...");
   try {
     const data = await apiRequest("/data");
     products = data.products;
     content = data.content;
+    expandedProductIndex = null;
+    lastDeletedProduct = null;
+    undoDeleteButton.hidden = true;
     renderProducts();
     renderContent();
+    renderReviewsAdmin();
+    renderContacts();
+    markSaved();
     setStatus("Данные загружены.", "ok");
   } catch (error) {
     setStatus(error.message, "error");
@@ -426,6 +641,9 @@ async function saveData() {
       method: "PUT",
       body: JSON.stringify({ products, content })
     });
+    markSaved();
+    lastDeletedProduct = null;
+    undoDeleteButton.hidden = true;
     setStatus("Готово. Сайт обновится через несколько минут.", "ok");
   } catch (error) {
     setStatus(error.message, "error");
@@ -466,10 +684,23 @@ function setupTabs() {
 }
 
 document.querySelector("#add-product").addEventListener("click", addProduct);
-document.querySelector("#reload").addEventListener("click", loadData);
+document.querySelector("#reload").addEventListener("click", () => {
+  if (!isDirty || window.confirm("Загрузить данные заново? Несохранённые изменения пропадут.")) loadData();
+});
 document.querySelector("#save").addEventListener("click", saveData);
-document.querySelector("#logout").addEventListener("click", () => showLogin());
+document.querySelector("#logout").addEventListener("click", () => {
+  if (!isDirty || window.confirm("Выйти без сохранения изменений?")) showLogin();
+});
+undoDeleteButton.addEventListener("click", undoProductDelete);
+const reviewPicker = filePicker({ multiple: true, onFiles: addReviews });
+document.body.append(reviewPicker);
+document.querySelector("#add-reviews").addEventListener("click", () => reviewPicker.click());
 loginForm.addEventListener("submit", login);
+window.addEventListener("beforeunload", (event) => {
+  if (!isDirty) return;
+  event.preventDefault();
+  event.returnValue = "";
+});
 setupTabs();
 if (sessionToken()) {
   showEditor();

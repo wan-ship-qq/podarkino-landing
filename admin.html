@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css?v=20260721-0228" />
+  <link rel="stylesheet" href="admin.css?v=20260721-0249" />
 </head>
 <body>
   <header class="admin-header">
@@ -40,6 +40,7 @@
       <div class="auth-state"><span class="auth-dot"></span>Вход выполнен</div>
       <button class="primary" type="button" id="save">Сохранить на сайте</button>
       <button type="button" id="reload">Обновить данные</button>
+      <button type="button" id="undo-delete" hidden>Отменить удаление</button>
       <button type="button" id="logout">Выйти</button>
       <p class="status" id="status" role="status">Загружаю данные…</p>
     </section>
@@ -48,6 +49,7 @@
     <section class="tabs" aria-label="Разделы редактора">
       <button class="tab active" type="button" data-tab="products">Товары</button>
       <button class="tab" type="button" data-tab="content">Тексты</button>
+      <button class="tab" type="button" data-tab="reviews">Отзывы и контакты</button>
     </section>
 
     <section class="panel active" data-panel="products">
@@ -76,9 +78,32 @@
       </div>
       <div class="content-editor" id="content-editor"></div>
     </section>
+
+    <section class="panel" data-panel="reviews">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">доверие и связь</p>
+          <h2>Отзывы и контакты</h2>
+        </div>
+      </div>
+      <div class="reviews-admin-grid">
+        <section class="reviews-admin-card">
+          <div class="photo-manager-heading">
+            <strong>Скриншоты отзывов</strong>
+            <p>Добавляйте отзывы и меняйте их порядок стрелками или перетаскиванием.</p>
+          </div>
+          <button class="primary" type="button" id="add-reviews">+ Загрузить отзывы</button>
+          <div class="review-list" id="reviews-editor"></div>
+        </section>
+        <section class="reviews-admin-card">
+          <h3>Контакты</h3>
+          <div class="contacts-editor" id="contacts-editor"></div>
+        </section>
+      </div>
+    </section>
     </div>
   </main>
 
-  <script src="admin.js?v=20260721-0228" defer></script>
+  <script src="admin.js?v=20260721-0249" defer></script>
 </body>
 </html>

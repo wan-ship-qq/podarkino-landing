@@ -1,4 +1,4 @@
-const assetVersion = "20260720-2021";
+const assetVersion = "20260721-0249";
 
 const fallbackProducts = [
   {
@@ -368,6 +368,27 @@ function applyContent(content) {
     }
   });
 
+  renderReviews(data.reviews);
+
+}
+
+function renderReviews(reviews) {
+  const root = document.querySelector("[data-reviews]");
+  if (!root) return;
+  if (!Array.isArray(reviews) || !reviews.length) {
+    root.innerHTML = `<div class="reviews-empty"><div class="reviews-stars" aria-label="Пять звёзд">★★★★★</div><h3>Первые отзывы скоро появятся</h3><p>Здесь будут живые впечатления покупателей о наборах, оформлении и вручении подарков.</p></div>`;
+    return;
+  }
+  const grid = document.createElement("div");
+  grid.className = "reviews-grid";
+  reviews.forEach((source, index) => {
+    const image = document.createElement("img");
+    image.src = source;
+    image.alt = `Отзыв покупателя ${index + 1}`;
+    image.loading = "lazy";
+    grid.append(image);
+  });
+  root.replaceChildren(grid);
 }
 
 async function loadContent() {
