@@ -3,6 +3,7 @@ const REPO = "podarkino-landing";
 const BRANCH = "main";
 const ALLOWED_ORIGIN = "https://wan-ship-qq.github.io";
 const ALLOWED_PATHS = new Set(["data/products.json", "data/content.json"]);
+const MAX_IMAGE_BASE64_LENGTH = 8 * 1024 * 1024;
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
 
 const encoder = new TextEncoder();
@@ -128,6 +129,41 @@ async function updateGithubFile(path, data, message, token) {
   }
 }
 
+function safeAssetName(filename) {
+  const base = String(filename || "photo")
+    .replace(/\.[^.]+$/, "")
+    .normalize("NFKD")
+    .replace(/[^a-zA-Z0-9_-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48) || "photo";
+  return `assets/admin/${base}-${crypto.randomUUID()}.webp`;
+}
+
+async function uploadGithubImage(filename, content, token) {
+  if (typeof content !== "string" || !content || content.length > MAX_IMAGE_BASE64_LENGTH) {
+    throw new Error("Изображение пустое или слишком большое");
+  }
+  if (!/^[A-Za-z0-9+/]+={0,2}$/.test(content)) throw new Error("Некорректное изображение");
+  const path = safeAssetName(filename);
+  const response = await fetch(githubUrl(path), {
+    method: "PUT",
+    headers: {
+      ...githubHeaders(token),
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: `Upload product image ${path.split("/").pop()}`,
+      branch: BRANCH,
+      content
+    })
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || `GitHub image upload failed: ${response.status}`);
+  }
+  return path;
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -192,6 +228,19 @@ export default {
           env.GITHUB_TOKEN
         );
         return json({ ok: true }, 200, origin);
+      } catch (error) {
+        return json({ error: error.message }, 502, origin);
+      }
+    }
+
+    if (url.pathname === "/image" && request.method === "PUT") {
+      const body = await request.json().catch(() => null);
+      if (!body || typeof body.filename !== "string" || typeof body.content !== "string") {
+        return json({ error: "Некорректное изображение" }, 400, origin);
+      }
+      try {
+        const path = await uploadGithubImage(body.filename, body.content, env.GITHUB_TOKEN);
+        return json({ ok: true, path }, 200, origin);
       } catch (error) {
         return json({ error: error.message }, 502, origin);
       }

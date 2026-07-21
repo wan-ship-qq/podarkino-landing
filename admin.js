@@ -30,6 +30,7 @@ const contentFields = [
 
 let products = [];
 let content = {};
+let pendingUploads = 0;
 
 const loginPanel = document.querySelector("#login-panel");
 const loginForm = document.querySelector("#login-form");
@@ -41,6 +42,7 @@ const statusEl = document.querySelector("#status");
 const productsEditor = document.querySelector("#products-editor");
 const productsPreview = document.querySelector("#products-preview");
 const contentEditor = document.querySelector("#content-editor");
+const saveButton = document.querySelector("#save");
 
 function setStatus(message, type = "") {
   statusEl.textContent = message;
@@ -116,14 +118,125 @@ function moveProductPhoto(productIndex, photoIndex, direction) {
   renderProducts();
 }
 
+function removeProductPhoto(productIndex, photoIndex) {
+  const photos = productPhotos(products[productIndex]);
+  photos.splice(photoIndex, 1);
+  setProductPhotos(productIndex, photos);
+  renderProducts();
+}
+
+function imageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const source = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(source);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(source);
+      reject(new Error("Не удалось прочитать изображение"));
+    };
+    image.src = source;
+  });
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
+    reader.onerror = () => reject(new Error("Не удалось подготовить изображение"));
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function prepareImage(file) {
+  if (!file.type.startsWith("image/")) throw new Error("Выберите файл изображения");
+  if (file.size > 20 * 1024 * 1024) throw new Error("Файл слишком большой. Максимум — 20 МБ");
+
+  const image = await imageFromFile(file);
+  const maxSide = 1800;
+  const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+  canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.88));
+  if (!blob) throw new Error("Браузер не смог обработать изображение");
+  return { filename: `${file.name.replace(/\.[^.]+$/, "") || "photo"}.webp`, content: await blobToBase64(blob) };
+}
+
+async function uploadPhoto(file) {
+  pendingUploads += 1;
+  saveButton.disabled = true;
+  setStatus("Загружаю фотографию…");
+  try {
+    const prepared = await prepareImage(file);
+    const result = await apiRequest("/image", {
+      method: "PUT",
+      body: JSON.stringify(prepared)
+    });
+    setStatus("Фотография загружена. Не забудьте сохранить изменения на сайте.", "ok");
+    return result.path;
+  } finally {
+    pendingUploads -= 1;
+    saveButton.disabled = pendingUploads > 0;
+  }
+}
+
+async function addProductPhotos(productIndex, files) {
+  try {
+    const photos = productPhotos(products[productIndex]);
+    for (const file of files) {
+      photos.push(await uploadPhoto(file));
+      setProductPhotos(productIndex, photos);
+    }
+  } catch (error) {
+    setStatus(error.message, "error");
+  } finally {
+    renderProducts();
+  }
+}
+
+async function replaceProductPhoto(productIndex, photoIndex, file) {
+  try {
+    const photos = productPhotos(products[productIndex]);
+    photos[photoIndex] = await uploadPhoto(file);
+    setProductPhotos(productIndex, photos);
+    renderProducts();
+  } catch (error) {
+    setStatus(error.message, "error");
+  }
+}
+
+function filePicker({ multiple = false, onFiles }) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/jpeg,image/png,image/webp";
+  input.multiple = multiple;
+  input.hidden = true;
+  input.addEventListener("change", () => {
+    if (input.files.length) onFiles([...input.files]);
+    input.value = "";
+  });
+  return input;
+}
+
 function photoManager(product, productIndex) {
   const manager = el("section", "photo-manager");
   const heading = el("div", "photo-manager-heading");
   heading.append(
     el("strong", "", "Фотографии товара"),
-    el("p", "", "Первое фото — обложка. Используйте стрелки, чтобы менять фотографии местами.")
+    el("p", "", "Первое фото — обложка. Фото можно загружать, заменять, удалять и менять местами.")
   );
-  manager.append(heading);
+  const addPhoto = el("button", "photo-add", "+ Загрузить фото");
+  addPhoto.type = "button";
+  const addPicker = filePicker({
+    multiple: true,
+    onFiles: (files) => addProductPhotos(productIndex, files)
+  });
+  addPhoto.addEventListener("click", () => addPicker.click());
+  manager.append(heading, addPhoto, addPicker);
 
   const list = el("div", "photo-list");
   const photos = productPhotos(product);
@@ -166,7 +279,22 @@ function photoManager(product, productIndex) {
     right.disabled = photoIndex === photos.length - 1;
     right.addEventListener("click", () => moveProductPhoto(productIndex, photoIndex, 1));
 
-    actions.append(left, right);
+    const replace = el("button", "photo-replace", "Заменить");
+    replace.type = "button";
+    const replacePicker = filePicker({
+      onFiles: ([file]) => replaceProductPhoto(productIndex, photoIndex, file)
+    });
+    replace.addEventListener("click", () => replacePicker.click());
+
+    const remove = el("button", "danger photo-remove", "Удалить");
+    remove.type = "button";
+    remove.addEventListener("click", () => {
+      if (window.confirm("Удалить эту фотографию из товара?")) {
+        removeProductPhoto(productIndex, photoIndex);
+      }
+    });
+
+    actions.append(left, right, replace, replacePicker, remove);
     item.append(image, details, actions);
     list.append(item);
   });
@@ -288,6 +416,10 @@ async function loadData() {
 }
 
 async function saveData() {
+  if (pendingUploads) {
+    setStatus("Дождитесь окончания загрузки фотографий.", "error");
+    return;
+  }
   setStatus("Сохраняю изменения на сайте...");
   try {
     await apiRequest("/data", {
