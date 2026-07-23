@@ -61,14 +61,19 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .section-head p:not(.eyebrow),.story-card p,.contacts p{color:var(--muted);font-size:18px}
 .product-showroom{max-width:1240px}
 .product-showroom .section-head{position:relative;z-index:2}
-.product-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:54px 0;padding:40px 28px 66px;background:
-  radial-gradient(circle at 50% 0,rgba(255,221,164,.22),transparent 42%),
-  repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 2px,transparent 2px 148px),
-  repeating-linear-gradient(2deg,#55311e 0 3px,#6a4028 5px 72px,#4b2a1a 74px 78px);
-  box-shadow:inset 0 22px 40px rgba(31,14,7,.25),0 24px 62px rgba(58,35,24,.2);perspective:1200px;overflow:hidden}
-.product-grid:before{display:none}
+.product-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:54px 0;padding:40px 28px 66px;border:9px solid #4d2816;background-color:#714026;background-image:
+  radial-gradient(ellipse at 50% 3%,rgba(255,221,174,.18),transparent 44%),
+  linear-gradient(90deg,rgba(30,13,6,.2),transparent 12%,rgba(255,214,158,.055) 48%,transparent 86%,rgba(28,12,5,.24)),
+  url("assets/walnut-showcase-texture.webp");
+  background-size:100% 680px,100% 100%,768px 512px;background-repeat:no-repeat,no-repeat,repeat;background-blend-mode:screen,soft-light,normal;
+  box-shadow:inset 0 24px 38px rgba(22,8,2,.44),inset 14px 0 22px rgba(24,9,3,.28),inset -14px 0 22px rgba(24,9,3,.28),0 24px 62px rgba(58,35,24,.2);perspective:1200px;overflow:hidden}
+.product-grid:before{content:"";position:absolute;inset:0;z-index:3;display:block;border:1px solid rgba(255,220,172,.13);box-shadow:inset 0 2px rgba(255,232,196,.13),inset 0 -12px 18px rgba(24,9,3,.24);pointer-events:none}
 .product-card{position:relative;display:flex;align-items:flex-end;justify-content:center;min-width:0;height:350px;padding:28px 32px 34px 18px;border:0;background:radial-gradient(ellipse at 50% 82%,rgba(24,11,5,.26),transparent 58%);box-shadow:none;overflow:visible}
-.product-card:after{content:"";position:absolute;left:-2px;right:-2px;bottom:-10px;height:25px;border-radius:2px;background:linear-gradient(#c18a55 0 15%,#89552f 18% 55%,#60371f 58% 78%,#3e2114 80%);box-shadow:0 15px 18px rgba(20,9,4,.48),inset 0 2px rgba(255,233,196,.32)}
+.product-card:after{content:"";position:absolute;left:-2px;right:-2px;bottom:-10px;height:27px;border-radius:2px 2px 4px 4px;background:
+  linear-gradient(180deg,rgba(255,231,190,.62) 0 2px,rgba(151,91,51,.24) 3px 6px,transparent 7px),
+  linear-gradient(180deg,rgba(142,78,42,.28),rgba(52,25,12,.52)),
+  url("assets/walnut-showcase-texture.webp") 50% 42%/430px 287px;
+  box-shadow:0 4px 0 #3d1f10,0 15px 18px rgba(20,9,4,.55),inset 0 -7px 8px rgba(30,12,5,.34)}
 .product-box{position:relative;z-index:1;width:min(88%,270px);height:270px;padding:0;border:0;background:transparent;cursor:pointer;filter:drop-shadow(15px 18px 14px rgba(0,0,0,.48));transform:rotateY(-7deg);transform-origin:bottom center;transform-style:preserve-3d;transition:transform .28s ease,filter .28s ease}
 .product-box:before{content:"";position:absolute;top:8px;right:-23px;bottom:-1px;width:24px;background:linear-gradient(90deg,#845334,#4a291a);clip-path:polygon(0 0,100% 5%,100% 96%,0 100%);box-shadow:inset 4px 0 7px rgba(255,225,179,.2);transform:translateZ(-2px)}
 .product-box:after{content:"";position:absolute;left:10px;right:-22px;top:-15px;height:24px;background:linear-gradient(#c18a58,#70452d);clip-path:polygon(0 63%,91% 0,100% 38%,8% 100%);box-shadow:inset 0 2px rgba(255,238,207,.28);transform:translateZ(-1px)}
