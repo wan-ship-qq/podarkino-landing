@@ -96,21 +96,23 @@ productViewer.setAttribute("aria-label", "Карточка подарочног�
 productViewer.hidden = true;
 productViewer.innerHTML = `
   <button class="product-viewer-close" type="button" aria-label="Закрыть карточку">&times;</button>
-  <div class="product-viewer-hero">
+  <div class="product-viewer-card">
     <h2 class="product-viewer-title"></h2>
-    <div class="product-viewer-stage">
-      <button class="product-viewer-nav product-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
-      <img class="product-viewer-photo" alt="" data-image-viewer="off" />
-      <button class="product-viewer-nav product-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
-      <span class="product-viewer-count" aria-live="polite"></span>
-    </div>
-  </div>
-  <div class="product-viewer-details">
-    <p class="product-viewer-description"></p>
-    <div class="product-facts">
-      <div class="product-fact"><span>Состав</span><b data-product-composition></b></div>
-      <div class="product-fact"><span>Масса</span><b data-product-weight></b></div>
-      <div class="product-fact"><span>Цена</span><b data-product-price></b></div>
+    <div class="product-viewer-layout">
+      <div class="product-viewer-stage">
+        <button class="product-viewer-nav product-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
+        <img class="product-viewer-photo" alt="" data-image-viewer="off" />
+        <button class="product-viewer-nav product-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
+        <span class="product-viewer-count" aria-live="polite"></span>
+      </div>
+      <div class="product-viewer-details">
+        <p class="product-viewer-description"></p>
+        <div class="product-facts">
+          <div class="product-fact"><span>Состав</span><b data-product-composition></b></div>
+          <div class="product-fact"><span>Масса</span><b data-product-weight></b></div>
+          <div class="product-fact"><span>Цена</span><b data-product-price></b></div>
+        </div>
+      </div>
     </div>
   </div>
 `;
