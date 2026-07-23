@@ -1,4 +1,4 @@
-const assetVersion = "20260723-1550";
+const assetVersion = "20260723-1554";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -27,6 +27,9 @@ const fallbackProducts = [
   {
     title: "Подарочный набор сладостей «Сердце»",
     description: "Яркий сладкий подарок для близкого человека, искреннего признания или особого повода.",
+    composition: "Арахис в белом шоколаде, мармелад в карамельной глазури, клюква в шоколаде",
+    weight: "200 г",
+    price: "560 ₽",
     image: "assets/sweets-heart-box-3d.png?v=20260720-1907",
     viewerImage: "assets/sweets-heart-box-full.jpg?v=20260720-1907",
     images: [
