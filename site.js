@@ -338,6 +338,11 @@ productViewer.innerHTML = `
           <div class="product-fact"><span>Цена</span><b data-product-price></b></div>
         </div>
         <button class="product-viewer-cart" type="button">В корзину</button>
+        <nav class="product-switcher" aria-label="Переключение наборов">
+          <button class="product-switcher-button" type="button" data-product-previous aria-label="Предыдущий набор">&#8592; Предыдущий</button>
+          <span class="product-switcher-count" data-product-count aria-live="polite"></span>
+          <button class="product-switcher-button" type="button" data-product-next aria-label="Следующий набор">Следующий &#8594;</button>
+        </nav>
       </div>
     </div>
   </div>
@@ -350,11 +355,15 @@ const productViewerPrevious = productViewer.querySelector(".product-viewer-prev"
 const productViewerNext = productViewer.querySelector(".product-viewer-next");
 const productViewerCount = productViewer.querySelector(".product-viewer-count");
 const productViewerCaption = productViewer.querySelector(".product-viewer-caption");
+const productPrevious = productViewer.querySelector("[data-product-previous]");
+const productNext = productViewer.querySelector("[data-product-next]");
+const productCount = productViewer.querySelector("[data-product-count]");
 let activeProductImages = [];
 let activeProductImageIndex = 0;
 let productLastFocusedElement = null;
 let productTouchStartX = null;
 let activeProduct = null;
+let viewerProducts = [];
 
 function showProductImage(index) {
   if (!activeProductImages.length) return;
@@ -372,8 +381,9 @@ function showProductImage(index) {
 }
 
 function openProductViewer(product) {
+  const wasHidden = productViewer.hidden;
   activeProduct = product;
-  productLastFocusedElement = document.activeElement;
+  if (wasHidden) productLastFocusedElement = document.activeElement;
   const sources = [product.viewerImage || product.image, ...(Array.isArray(product.images) ? product.images : [])]
     .filter(Boolean)
     .map(versionedAsset);
@@ -391,10 +401,23 @@ function openProductViewer(product) {
   productViewer.querySelector("[data-product-composition]").textContent = product.composition || "Состав скоро добавим";
   productViewer.querySelector("[data-product-weight]").textContent = product.weight || "Уточняется";
   productViewer.querySelector("[data-product-price]").textContent = product.price || "Уточняется";
+  const productIndex = viewerProducts.indexOf(product);
+  productCount.textContent = productIndex >= 0 ? `${productIndex + 1} / ${viewerProducts.length}` : "";
+  const singleProduct = viewerProducts.length < 2;
+  productPrevious.hidden = singleProduct;
+  productNext.hidden = singleProduct;
+  productCount.hidden = singleProduct;
   showProductImage(0);
   productViewer.hidden = false;
   document.body.classList.add("viewer-open");
-  productViewerClose.focus();
+  if (wasHidden) productViewerClose.focus();
+}
+
+function navigateProduct(step) {
+  if (viewerProducts.length < 2) return;
+  const currentIndex = Math.max(0, viewerProducts.indexOf(activeProduct));
+  const nextIndex = (currentIndex + step + viewerProducts.length) % viewerProducts.length;
+  openProductViewer(viewerProducts[nextIndex]);
 }
 
 function closeProductViewer() {
@@ -416,6 +439,8 @@ productViewer.querySelector(".product-viewer-cart").addEventListener("click", ()
 });
 productViewerPrevious.addEventListener("click", () => showProductImage(activeProductImageIndex - 1));
 productViewerNext.addEventListener("click", () => showProductImage(activeProductImageIndex + 1));
+productPrevious.addEventListener("click", () => navigateProduct(-1));
+productNext.addEventListener("click", () => navigateProduct(1));
 productViewer.addEventListener("click", (event) => {
   if (event.target === productViewer) closeProductViewer();
 });
@@ -594,6 +619,7 @@ function renderProducts(products) {
   if (!productsRoot) return;
 
   const visibleProducts = products.filter((product) => product.visible !== false);
+  viewerProducts = visibleProducts;
   productsRoot.replaceChildren(...visibleProducts.map(productCard));
 }
 

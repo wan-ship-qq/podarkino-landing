@@ -140,6 +140,11 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .product-fact span{display:block;margin-bottom:5px;color:var(--caramel);font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
 .product-fact b{font-size:15px;line-height:1.35}
 .product-viewer-cart{width:100%;margin-top:18px;min-height:50px;font-size:15px}
+.product-switcher{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:12px}
+.product-switcher-button{min-height:42px;padding:0 10px;border:1px solid rgba(101,61,37,.22);border-radius:999px;background:rgba(255,255,255,.66);color:var(--cocoa);font:800 13px/1 Manrope,sans-serif;cursor:pointer;transition:.2s ease}
+.product-switcher-button:hover{background:#fff;transform:translateY(-1px)}
+.product-switcher-button:focus-visible{outline:3px solid #e3b97f;outline-offset:2px}
+.product-switcher-count{min-width:40px;color:var(--muted);font-size:12px;font-weight:900;text-align:center}
 .viewer-trigger{cursor:zoom-in}
 .viewer-trigger:focus-visible{outline:3px solid var(--caramel);outline-offset:4px}
 .image-viewer[hidden]{display:none}
