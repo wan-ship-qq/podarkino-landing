@@ -1,4 +1,4 @@
-const assetVersion = "20260723-1305";
+const assetVersion = "20260723-1425";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -76,7 +76,7 @@ function productCard(product) {
   if (product.image) {
     const image = document.createElement("img");
     image.src = versionedAsset(product.image);
-    image.alt = product.title || "Подарок из магазина Подаркино";
+    image.alt = product.imageCaption || product.title || "Подарок из магазина Подаркино";
     image.loading = "lazy";
     image.dataset.imageViewer = "off";
     imageWrap.append(image);
@@ -102,6 +102,7 @@ productViewer.innerHTML = `
       <div class="product-viewer-stage">
         <button class="product-viewer-nav product-viewer-prev" type="button" aria-label="Предыдущее фото">&#8249;</button>
         <img class="product-viewer-photo" alt="" data-image-viewer="off" />
+        <p class="product-viewer-caption" hidden></p>
         <button class="product-viewer-nav product-viewer-next" type="button" aria-label="Следующее фото">&#8250;</button>
         <span class="product-viewer-count" aria-live="polite"></span>
       </div>
@@ -123,6 +124,7 @@ const productViewerClose = productViewer.querySelector(".product-viewer-close");
 const productViewerPrevious = productViewer.querySelector(".product-viewer-prev");
 const productViewerNext = productViewer.querySelector(".product-viewer-next");
 const productViewerCount = productViewer.querySelector(".product-viewer-count");
+const productViewerCaption = productViewer.querySelector(".product-viewer-caption");
 let activeProductImages = [];
 let activeProductImageIndex = 0;
 let productLastFocusedElement = null;
@@ -134,6 +136,8 @@ function showProductImage(index) {
   const item = activeProductImages[activeProductImageIndex];
   productViewerPhoto.src = item.src;
   productViewerPhoto.alt = item.alt;
+  productViewerCaption.textContent = item.caption || "";
+  productViewerCaption.hidden = !item.caption;
   productViewerCount.textContent = `${activeProductImageIndex + 1} / ${activeProductImages.length}`;
   const singleImage = activeProductImages.length < 2;
   productViewerPrevious.hidden = singleImage;
@@ -146,9 +150,14 @@ function openProductViewer(product) {
   const sources = [product.viewerImage || product.image, ...(Array.isArray(product.images) ? product.images : [])]
     .filter(Boolean)
     .map(versionedAsset);
+  const captions = [
+    product.viewerImageCaption || product.imageCaption || "",
+    ...(Array.isArray(product.imageCaptions) ? product.imageCaptions : [])
+  ];
   activeProductImages = sources.map((src, index) => ({
     src,
-    alt: `${product.title || "Подарочный набор"}${index ? `, фото ${index + 1}` : ""}`
+    alt: captions[index] || `${product.title || "Подарочный набор"}${index ? `, фото ${index + 1}` : ""}`,
+    caption: captions[index] || ""
   }));
   productViewer.querySelector(".product-viewer-title").textContent = product.title || "Подарочный набор";
   productViewer.querySelector(".product-viewer-description").textContent = product.description || "Описание набора скоро появится.";
@@ -378,7 +387,20 @@ function applyContent(content) {
   });
 
   renderReviews(data.reviews);
+  renderPageImages(data.pageImages);
 
+}
+
+function renderPageImages(pageImages) {
+  if (!pageImages || typeof pageImages !== "object") return;
+  document.querySelectorAll("[data-image-key]").forEach((image) => {
+    const value = pageImages[image.dataset.imageKey];
+    if (!value) return;
+    const source = typeof value === "string" ? value : value.src;
+    const caption = typeof value === "object" ? value.caption : "";
+    if (source) image.src = versionedAsset(source);
+    if (caption) image.alt = caption;
+  });
 }
 
 function renderReviews(reviews) {
@@ -390,12 +412,23 @@ function renderReviews(reviews) {
   }
   const grid = document.createElement("div");
   grid.className = "reviews-grid";
-  reviews.forEach((source, index) => {
+  reviews.forEach((value, index) => {
+    const source = typeof value === "string" ? value : value?.src;
+    if (!source) return;
+    const caption = typeof value === "object" ? value.caption || "" : "";
+    const figure = document.createElement("figure");
+    figure.className = "review-card";
     const image = document.createElement("img");
     image.src = source;
-    image.alt = `Отзыв покупателя ${index + 1}`;
+    image.alt = caption || `Отзыв покупателя ${index + 1}`;
     image.loading = "lazy";
-    grid.append(image);
+    figure.append(image);
+    if (caption) {
+      const figcaption = document.createElement("figcaption");
+      figcaption.textContent = caption;
+      figure.append(figcaption);
+    }
+    grid.append(figure);
   });
   root.replaceChildren(grid);
 }

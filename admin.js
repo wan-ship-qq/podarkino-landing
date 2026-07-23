@@ -8,7 +8,11 @@ const productDefaults = {
   weight: "",
   price: "",
   image: "assets/tea-sweets.jpg",
+  imageCaption: "",
+  viewerImage: "",
+  viewerImageCaption: "",
   images: [],
+  imageCaptions: [],
   visible: true
 };
 
@@ -21,6 +25,17 @@ const contentFields = [
   ["footerText", "Текст в подвале", "textarea"]
 ];
 
+const pageImageSlots = [
+  ["teacher", "Учителю / Воспитателю", "assets/teacher-gift-3.jpg", "Подарочный набор учителю ко Дню учителя"],
+  ["trainer", "Тренеру", "assets/trainer-gift-2.jpg", "Дети дарят подарочный набор тренеру в спортивном зале"],
+  ["relatives", "Родным и близким", "assets/relatives-gift-1.jpg", "Большая семья получает подарочный набор за праздничным столом"],
+  ["colleague", "Коллегам", "assets/colleague-gift.jpg", "Коллеги отмечают праздник за чаепитием с подарочным набором"],
+  ["friends", "Друзьям", "assets/friends-gift-2.jpg", "Девушка вручает другу подарочный набор"],
+  ["child", "Ребёнку", "assets/child-gift-1.jpg", "Мальчик с подарочным набором на дне рождения"],
+  ["belovedWoman", "Любимой", "assets/beloved-woman-gift.jpg", "Мужчина дарит любимой девушке подарочный набор"],
+  ["belovedMan", "Любимому", "assets/beloved-gift-1.jpg", "Девушка дарит любимому мужчине подарочный набор"]
+];
+
 let products = [];
 let content = {};
 let pendingUploads = 0;
@@ -28,6 +43,9 @@ let isDirty = false;
 let expandedProductIndex = null;
 let lastDeletedProduct = null;
 let draggedPhoto = null;
+let imageEditorSource = "";
+let imageEditorImage = null;
+let imageEditorSaveHandler = null;
 
 const loginPanel = document.querySelector("#login-panel");
 const loginForm = document.querySelector("#login-form");
@@ -39,10 +57,18 @@ const statusEl = document.querySelector("#status");
 const productsEditor = document.querySelector("#products-editor");
 const productsPreview = document.querySelector("#products-preview");
 const contentEditor = document.querySelector("#content-editor");
+const pagePhotosEditor = document.querySelector("#page-photos-editor");
 const reviewsEditor = document.querySelector("#reviews-editor");
 const contactsEditor = document.querySelector("#contacts-editor");
 const saveButton = document.querySelector("#save");
 const undoDeleteButton = document.querySelector("#undo-delete");
+const imageEditorModal = document.querySelector("#image-editor-modal");
+const imageEditorCanvas = document.querySelector("#image-editor-canvas");
+const imageEditorRatio = document.querySelector("#image-editor-ratio");
+const imageEditorZoom = document.querySelector("#image-editor-zoom");
+const imageEditorX = document.querySelector("#image-editor-x");
+const imageEditorY = document.querySelector("#image-editor-y");
+const imageEditorSave = document.querySelector("#image-editor-save");
 
 function markDirty() {
   isDirty = true;
@@ -118,17 +144,29 @@ function productPhotos(product) {
     .filter((source) => typeof source === "string" && source.trim());
 }
 
-function setProductPhotos(index, photos) {
+function productPhotoCaptions(product) {
+  const captions = [
+    typeof product.imageCaption === "string" ? product.imageCaption : "",
+    ...(Array.isArray(product.imageCaptions) ? product.imageCaptions : [])
+  ];
+  while (captions.length < productPhotos(product).length) captions.push("");
+  return captions;
+}
+
+function setProductPhotos(index, photos, captions = productPhotoCaptions(products[index])) {
   const [image = "", ...images] = photos;
-  products[index] = { ...products[index], image, images };
+  const [imageCaption = "", ...imageCaptions] = captions;
+  products[index] = { ...products[index], image, imageCaption, images, imageCaptions };
 }
 
 function moveProductPhoto(productIndex, photoIndex, direction) {
   const photos = productPhotos(products[productIndex]);
   const next = photoIndex + direction;
   if (next < 0 || next >= photos.length) return;
+  const captions = productPhotoCaptions(products[productIndex]);
   [photos[photoIndex], photos[next]] = [photos[next], photos[photoIndex]];
-  setProductPhotos(productIndex, photos);
+  [captions[photoIndex], captions[next]] = [captions[next], captions[photoIndex]];
+  setProductPhotos(productIndex, photos, captions);
   markDirty();
   renderProducts();
 }
@@ -136,17 +174,22 @@ function moveProductPhoto(productIndex, photoIndex, direction) {
 function makeProductPhotoCover(productIndex, photoIndex) {
   if (photoIndex === 0) return;
   const photos = productPhotos(products[productIndex]);
+  const captions = productPhotoCaptions(products[productIndex]);
   const [cover] = photos.splice(photoIndex, 1);
+  const [coverCaption] = captions.splice(photoIndex, 1);
   photos.unshift(cover);
-  setProductPhotos(productIndex, photos);
+  captions.unshift(coverCaption);
+  setProductPhotos(productIndex, photos, captions);
   markDirty();
   renderProducts();
 }
 
 function removeProductPhoto(productIndex, photoIndex) {
   const photos = productPhotos(products[productIndex]);
+  const captions = productPhotoCaptions(products[productIndex]);
   photos.splice(photoIndex, 1);
-  setProductPhotos(productIndex, photos);
+  captions.splice(photoIndex, 1);
+  setProductPhotos(productIndex, photos, captions);
   markDirty();
   renderProducts();
 }
@@ -210,6 +253,96 @@ async function uploadPhoto(file) {
   }
 }
 
+function imageFromSource(source) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Не удалось открыть фотографию для обрезки"));
+    image.src = source;
+  });
+}
+
+function selectedCropRatio() {
+  if (!imageEditorImage) return 1;
+  if (imageEditorRatio.value === "original") {
+    return imageEditorImage.naturalWidth / imageEditorImage.naturalHeight;
+  }
+  return Number(imageEditorRatio.value) || 1;
+}
+
+function renderImageEditor() {
+  if (!imageEditorImage) return;
+  const ratio = selectedCropRatio();
+  const maxSide = 1400;
+  const width = ratio >= 1 ? maxSide : Math.round(maxSide * ratio);
+  const height = ratio >= 1 ? Math.round(maxSide / ratio) : maxSide;
+  imageEditorCanvas.width = Math.max(1, width);
+  imageEditorCanvas.height = Math.max(1, height);
+
+  const context = imageEditorCanvas.getContext("2d");
+  const zoom = Number(imageEditorZoom.value) || 1;
+  const baseScale = Math.max(
+    imageEditorCanvas.width / imageEditorImage.naturalWidth,
+    imageEditorCanvas.height / imageEditorImage.naturalHeight
+  );
+  const scale = baseScale * zoom;
+  const drawWidth = imageEditorImage.naturalWidth * scale;
+  const drawHeight = imageEditorImage.naturalHeight * scale;
+  const travelX = Math.max(0, (drawWidth - imageEditorCanvas.width) / 2);
+  const travelY = Math.max(0, (drawHeight - imageEditorCanvas.height) / 2);
+  const drawX = (imageEditorCanvas.width - drawWidth) / 2 + (Number(imageEditorX.value) / 100) * travelX;
+  const drawY = (imageEditorCanvas.height - drawHeight) / 2 + (Number(imageEditorY.value) / 100) * travelY;
+
+  context.fillStyle = "#fff";
+  context.fillRect(0, 0, imageEditorCanvas.width, imageEditorCanvas.height);
+  context.drawImage(imageEditorImage, drawX, drawY, drawWidth, drawHeight);
+}
+
+async function openImageEditor(source, onSave) {
+  try {
+    setStatus("Открываю редактор фотографии…");
+    imageEditorSource = source;
+    imageEditorImage = await imageFromSource(source);
+    imageEditorSaveHandler = onSave;
+    imageEditorRatio.value = "original";
+    imageEditorZoom.value = "1";
+    imageEditorX.value = "0";
+    imageEditorY.value = "0";
+    renderImageEditor();
+    imageEditorModal.hidden = false;
+    document.body.classList.add("image-editor-open");
+    setStatus("Настройте кадр и нажмите «Сохранить обрезку».", "ok");
+  } catch (error) {
+    setStatus(error.message, "error");
+  }
+}
+
+function closeImageEditor() {
+  imageEditorModal.hidden = true;
+  document.body.classList.remove("image-editor-open");
+  imageEditorSource = "";
+  imageEditorImage = null;
+  imageEditorSaveHandler = null;
+}
+
+async function saveImageCrop() {
+  if (!imageEditorImage || !imageEditorSaveHandler) return;
+  imageEditorSave.disabled = true;
+  try {
+    const blob = await new Promise((resolve) => imageEditorCanvas.toBlob(resolve, "image/webp", 0.9));
+    if (!blob) throw new Error("Не удалось сохранить обрезанную фотографию");
+    const name = `${imageEditorSource.split("/").pop()?.split("?")[0]?.replace(/\.[^.]+$/, "") || "photo"}-crop.webp`;
+    const path = await uploadPhoto(new File([blob], name, { type: "image/webp" }));
+    await imageEditorSaveHandler(path);
+    closeImageEditor();
+  } catch (error) {
+    setStatus(error.message, "error");
+  } finally {
+    imageEditorSave.disabled = false;
+  }
+}
+
 async function addProductPhotos(productIndex, files) {
   try {
     const photos = productPhotos(products[productIndex]);
@@ -235,6 +368,30 @@ async function replaceProductPhoto(productIndex, photoIndex, file) {
   } catch (error) {
     setStatus(error.message, "error");
   }
+}
+
+function setProductPhotoSource(productIndex, photoIndex, source) {
+  const photos = productPhotos(products[productIndex]);
+  photos[photoIndex] = source;
+  setProductPhotos(productIndex, photos);
+  markDirty();
+  renderProducts();
+}
+
+async function replaceProductViewerPhoto(productIndex, file) {
+  try {
+    products[productIndex].viewerImage = await uploadPhoto(file);
+    markDirty();
+    renderProducts();
+  } catch (error) {
+    setStatus(error.message, "error");
+  }
+}
+
+function setProductViewerPhoto(productIndex, source) {
+  products[productIndex].viewerImage = source;
+  markDirty();
+  renderProducts();
 }
 
 function filePicker({ multiple = false, onFiles }) {
@@ -266,8 +423,52 @@ function photoManager(product, productIndex) {
   addPhoto.addEventListener("click", () => addPicker.click());
   manager.append(heading, addPhoto, addPicker);
 
+  const viewerSource = product.viewerImage || product.image;
+  if (viewerSource) {
+    const viewerManager = el("div", "photo-item viewer-photo-manager");
+    const viewerImage = document.createElement("img");
+    viewerImage.src = viewerSource;
+    viewerImage.alt = product.viewerImageCaption || `${product.title || "Товар"}, главное фото`;
+    const viewerDetails = el("div", "photo-details");
+    viewerDetails.append(el("strong", "", "Фото при открытии набора"));
+    const viewerCaption = document.createElement("input");
+    viewerCaption.type = "text";
+    viewerCaption.className = "photo-caption";
+    viewerCaption.placeholder = "Подпись к фото";
+    viewerCaption.value = product.viewerImageCaption || "";
+    viewerCaption.addEventListener("input", () => {
+      products[productIndex].viewerImageCaption = viewerCaption.value;
+      markDirty();
+    });
+    viewerDetails.append(viewerCaption);
+    const viewerActions = el("div", "photo-actions");
+    const viewerReplace = el("button", "", "Заменить");
+    viewerReplace.type = "button";
+    const viewerPicker = filePicker({
+      onFiles: ([file]) => replaceProductViewerPhoto(productIndex, file)
+    });
+    viewerReplace.addEventListener("click", () => viewerPicker.click());
+    const viewerCrop = el("button", "", "Обрезать");
+    viewerCrop.type = "button";
+    viewerCrop.addEventListener("click", () => {
+      openImageEditor(viewerSource, (path) => setProductViewerPhoto(productIndex, path));
+    });
+    const useCover = el("button", "", "Как обложка");
+    useCover.type = "button";
+    useCover.hidden = !product.viewerImage;
+    useCover.addEventListener("click", () => {
+      products[productIndex].viewerImage = "";
+      markDirty();
+      renderProducts();
+    });
+    viewerActions.append(viewerReplace, viewerPicker, viewerCrop, useCover);
+    viewerManager.append(viewerImage, viewerDetails, viewerActions);
+    manager.append(viewerManager);
+  }
+
   const list = el("div", "photo-list");
   const photos = productPhotos(product);
+  const captions = productPhotoCaptions(product);
   photos.forEach((source, photoIndex) => {
     const item = el("div", "photo-item");
     item.draggable = true;
@@ -284,9 +485,12 @@ function photoManager(product, productIndex) {
       event.preventDefault();
       if (!draggedPhoto || draggedPhoto.productIndex !== productIndex || draggedPhoto.photoIndex === photoIndex) return;
       const reordered = productPhotos(products[productIndex]);
+      const reorderedCaptions = productPhotoCaptions(products[productIndex]);
       const [moved] = reordered.splice(draggedPhoto.photoIndex, 1);
+      const [movedCaption] = reorderedCaptions.splice(draggedPhoto.photoIndex, 1);
       reordered.splice(photoIndex, 0, moved);
-      setProductPhotos(productIndex, reordered);
+      reorderedCaptions.splice(photoIndex, 0, movedCaption);
+      setProductPhotos(productIndex, reordered, reorderedCaptions);
       draggedPhoto = null;
       markDirty();
       renderProducts();
@@ -312,7 +516,20 @@ function photoManager(product, productIndex) {
       renderPreview();
     });
 
-    details.append(top, sourceInput);
+    const captionInput = document.createElement("input");
+    captionInput.type = "text";
+    captionInput.className = "photo-caption";
+    captionInput.placeholder = "Подпись к фото";
+    captionInput.value = captions[photoIndex] || "";
+    captionInput.setAttribute("aria-label", `Подпись к фото ${photoIndex + 1}`);
+    captionInput.addEventListener("input", () => {
+      const nextCaptions = productPhotoCaptions(products[productIndex]);
+      nextCaptions[photoIndex] = captionInput.value;
+      setProductPhotos(productIndex, productPhotos(products[productIndex]), nextCaptions);
+      markDirty();
+    });
+
+    details.append(top, sourceInput, captionInput);
 
     const actions = el("div", "photo-actions");
     const left = el("button", "", "←");
@@ -336,6 +553,12 @@ function photoManager(product, productIndex) {
     });
     replace.addEventListener("click", () => replacePicker.click());
 
+    const crop = el("button", "", "Обрезать");
+    crop.type = "button";
+    crop.addEventListener("click", () => {
+      openImageEditor(source, (path) => setProductPhotoSource(productIndex, photoIndex, path));
+    });
+
     const cover = el("button", "photo-cover", "Обложка");
     cover.type = "button";
     cover.hidden = photoIndex === 0;
@@ -349,7 +572,7 @@ function photoManager(product, productIndex) {
       }
     });
 
-    actions.append(left, right, cover, replace, replacePicker, remove);
+    actions.append(left, right, cover, replace, replacePicker, crop, remove);
     item.append(image, details, actions);
     list.append(item);
   });
@@ -516,8 +739,75 @@ function renderContent() {
   });
 }
 
+function pageImageEntry(key, fallbackSource, fallbackCaption) {
+  const value = content.pageImages?.[key];
+  if (typeof value === "string") return { src: value, caption: fallbackCaption };
+  return {
+    src: value?.src || fallbackSource,
+    caption: typeof value?.caption === "string" ? value.caption : fallbackCaption
+  };
+}
+
+function updatePageImage(key, entry) {
+  content.pageImages = { ...(content.pageImages || {}), [key]: entry };
+  markDirty();
+}
+
+async function replacePageImage(key, file) {
+  try {
+    const slot = pageImageSlots.find(([slotKey]) => slotKey === key);
+    const current = pageImageEntry(key, slot?.[2] || "", slot?.[3] || "");
+    updatePageImage(key, { ...current, src: await uploadPhoto(file) });
+    renderPageImages();
+  } catch (error) {
+    setStatus(error.message, "error");
+  }
+}
+
+function renderPageImages() {
+  pagePhotosEditor.replaceChildren();
+  pageImageSlots.forEach(([key, title, fallbackSource, fallbackCaption]) => {
+    const entry = pageImageEntry(key, fallbackSource, fallbackCaption);
+    const item = el("article", "page-photo-item");
+    const image = document.createElement("img");
+    image.src = entry.src;
+    image.alt = entry.caption || title;
+    const details = el("div", "page-photo-details");
+    details.append(el("strong", "", title));
+    const caption = document.createElement("input");
+    caption.type = "text";
+    caption.placeholder = "Подпись / описание фото";
+    caption.value = entry.caption;
+    caption.addEventListener("input", () => {
+      updatePageImage(key, { ...entry, caption: caption.value });
+      image.alt = caption.value || title;
+    });
+    const actions = el("div", "page-photo-actions");
+    const replace = el("button", "", "Заменить");
+    replace.type = "button";
+    const picker = filePicker({ onFiles: ([file]) => replacePageImage(key, file) });
+    replace.addEventListener("click", () => picker.click());
+    const crop = el("button", "", "Обрезать");
+    crop.type = "button";
+    crop.addEventListener("click", () => {
+      openImageEditor(entry.src, (path) => {
+        const latest = pageImageEntry(key, fallbackSource, fallbackCaption);
+        updatePageImage(key, { ...latest, src: path });
+        renderPageImages();
+      });
+    });
+    actions.append(replace, picker, crop);
+    details.append(caption, actions);
+    item.append(image, details);
+    pagePhotosEditor.append(item);
+  });
+}
+
 function reviewImages() {
-  return Array.isArray(content.reviews) ? content.reviews : [];
+  if (!Array.isArray(content.reviews)) return [];
+  return content.reviews.map((item) => (
+    typeof item === "string" ? { src: item, caption: "" } : { src: item?.src || "", caption: item?.caption || "" }
+  )).filter((item) => item.src);
 }
 
 function moveReview(index, direction) {
@@ -533,13 +823,25 @@ function moveReview(index, direction) {
 async function addReviews(files) {
   try {
     const reviews = reviewImages();
-    for (const file of files) reviews.push(await uploadPhoto(file));
+    for (const file of files) reviews.push({ src: await uploadPhoto(file), caption: "" });
     content.reviews = reviews;
     markDirty();
   } catch (error) {
     setStatus(error.message, "error");
   } finally {
     renderReviewsAdmin();
+  }
+}
+
+async function replaceReview(index, file) {
+  try {
+    const reviews = reviewImages();
+    reviews[index] = { ...reviews[index], src: await uploadPhoto(file) };
+    content.reviews = reviews;
+    markDirty();
+    renderReviewsAdmin();
+  } catch (error) {
+    setStatus(error.message, "error");
   }
 }
 
@@ -550,7 +852,7 @@ function renderReviewsAdmin() {
     reviewsEditor.append(el("p", "empty-note", "Отзывы ещё не загружены."));
     return;
   }
-  reviews.forEach((source, index) => {
+  reviews.forEach((review, index) => {
     const item = el("div", "review-admin-item");
     item.draggable = true;
     item.addEventListener("dragstart", () => {
@@ -574,9 +876,22 @@ function renderReviewsAdmin() {
       renderReviewsAdmin();
     });
     const image = document.createElement("img");
-    image.src = source;
-    image.alt = `Отзыв ${index + 1}`;
-    const label = el("strong", "", `Отзыв ${index + 1}`);
+    image.src = review.src;
+    image.alt = review.caption || `Отзыв ${index + 1}`;
+    const details = el("div", "review-admin-details");
+    details.append(el("strong", "", `Отзыв ${index + 1}`));
+    const caption = document.createElement("input");
+    caption.type = "text";
+    caption.placeholder = "Подпись к отзыву";
+    caption.value = review.caption;
+    caption.addEventListener("input", () => {
+      const next = reviewImages();
+      next[index] = { ...next[index], caption: caption.value };
+      content.reviews = next;
+      image.alt = caption.value || `Отзыв ${index + 1}`;
+      markDirty();
+    });
+    details.append(caption);
     const actions = el("div", "review-admin-actions");
     const left = el("button", "", "←");
     left.type = "button";
@@ -586,6 +901,21 @@ function renderReviewsAdmin() {
     right.type = "button";
     right.disabled = index === reviews.length - 1;
     right.addEventListener("click", () => moveReview(index, 1));
+    const replace = el("button", "", "Заменить");
+    replace.type = "button";
+    const replacePicker = filePicker({ onFiles: ([file]) => replaceReview(index, file) });
+    replace.addEventListener("click", () => replacePicker.click());
+    const crop = el("button", "", "Обрезать");
+    crop.type = "button";
+    crop.addEventListener("click", () => {
+      openImageEditor(review.src, (path) => {
+        const next = reviewImages();
+        next[index] = { ...next[index], src: path };
+        content.reviews = next;
+        markDirty();
+        renderReviewsAdmin();
+      });
+    });
     const remove = el("button", "danger", "Удалить");
     remove.type = "button";
     remove.addEventListener("click", () => {
@@ -595,8 +925,8 @@ function renderReviewsAdmin() {
       markDirty();
       renderReviewsAdmin();
     });
-    actions.append(left, right, remove);
-    item.append(image, label, actions);
+    actions.append(left, right, replace, replacePicker, crop, remove);
+    item.append(image, details, actions);
     reviewsEditor.append(item);
   });
 }
@@ -619,6 +949,7 @@ async function loadData() {
     undoDeleteButton.hidden = true;
     renderProducts();
     renderContent();
+    renderPageImages();
     renderReviewsAdmin();
     renderContacts();
     markSaved();
@@ -690,11 +1021,23 @@ undoDeleteButton.addEventListener("click", undoProductDelete);
 const reviewPicker = filePicker({ multiple: true, onFiles: addReviews });
 document.body.append(reviewPicker);
 document.querySelector("#add-reviews").addEventListener("click", () => reviewPicker.click());
+document.querySelector("#image-editor-close").addEventListener("click", closeImageEditor);
+document.querySelector("#image-editor-cancel").addEventListener("click", closeImageEditor);
+imageEditorSave.addEventListener("click", saveImageCrop);
+[imageEditorRatio, imageEditorZoom, imageEditorX, imageEditorY].forEach((control) => {
+  control.addEventListener("input", renderImageEditor);
+});
+imageEditorModal.addEventListener("click", (event) => {
+  if (event.target === imageEditorModal) closeImageEditor();
+});
 loginForm.addEventListener("submit", login);
 window.addEventListener("beforeunload", (event) => {
   if (!isDirty) return;
   event.preventDefault();
   event.returnValue = "";
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !imageEditorModal.hidden) closeImageEditor();
 });
 setupTabs();
 if (sessionToken()) {

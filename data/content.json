@@ -6,6 +6,46 @@
   "storyText": "Мы собираем подарки так, чтобы человеку было приятно уже в момент получения: красивая подача, понятный состав и ощущение, что подарок выбирали с заботой.",
   "contactsTitle": "Контакты",
   "contactsText": "Чтобы заказать набор или уточнить детали, напишите нам. Поможем выбрать подарок и ответим на вопросы.",
-  "reviews": [],
+  "pageImages": {
+    "teacher": {
+      "src": "assets/teacher-gift-3.jpg",
+      "caption": "Подарочный набор учителю ко Дню учителя"
+    },
+    "trainer": {
+      "src": "assets/trainer-gift-2.jpg",
+      "caption": "Дети дарят подарочный набор тренеру в спортивном зале"
+    },
+    "relatives": {
+      "src": "assets/relatives-gift-1.jpg",
+      "caption": "Большая семья получает подарочный набор за праздничным столом"
+    },
+    "colleague": {
+      "src": "assets/colleague-gift.jpg",
+      "caption": "Коллеги отмечают праздник за чаепитием с подарочным набором"
+    },
+    "friends": {
+      "src": "assets/friends-gift-2.jpg",
+      "caption": "Девушка вручает другу подарочный набор"
+    },
+    "child": {
+      "src": "assets/child-gift-1.jpg",
+      "caption": "Мальчик с подарочным набором на дне рождения"
+    },
+    "belovedWoman": {
+      "src": "assets/beloved-woman-gift.jpg",
+      "caption": "Мужчина дарит любимой девушке подарочный набор"
+    },
+    "belovedMan": {
+      "src": "assets/beloved-gift-1.jpg",
+      "caption": "Девушка дарит любимому мужчине подарочный набор"
+    }
+  },
+  "reviews": [
+    "assets/reviews/review-iraida-2026-04-19.jpg",
+    "assets/reviews/review-tatiana-2026-01-30.jpg",
+    "assets/reviews/review-vixen-2026-02-24.jpg",
+    "assets/reviews/review-olga-2026-06-11.jpg",
+    "assets/reviews/review-pavel-2025-11-28.jpg"
+  ],
   "footerText": "Вкусные подарочные наборы, которые легко выбрать и приятно дарить."
 }

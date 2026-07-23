@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css?v=20260721-0315" />
+  <link rel="stylesheet" href="admin.css?v=20260723-1425" />
 </head>
 <body>
   <header class="admin-header">
@@ -47,8 +47,20 @@
     <div id="editor" hidden>
     <section class="tabs" aria-label="Разделы редактора">
       <button class="tab active" type="button" data-tab="products">Товары</button>
+      <button class="tab" type="button" data-tab="photos">Фото страницы</button>
       <button class="tab" type="button" data-tab="content">Тексты</button>
       <button class="tab" type="button" data-tab="reviews">Отзывы и контакты</button>
+    </section>
+
+    <section class="panel" data-panel="photos">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">изображения</p>
+          <h2>Фотографии страницы</h2>
+        </div>
+      </div>
+      <p class="panel-note">Здесь можно заменить, обрезать и подписать фотографии из раздела «Кому дарить».</p>
+      <div class="page-photo-list" id="page-photos-editor"></div>
     </section>
 
     <section class="panel active" data-panel="products">
@@ -103,6 +115,49 @@
     </div>
   </main>
 
-  <script src="admin.js?v=20260721-0315" defer></script>
+  <div class="image-editor-modal" id="image-editor-modal" role="dialog" aria-modal="true" aria-labelledby="image-editor-title" hidden>
+    <div class="image-editor-card">
+      <div class="image-editor-head">
+        <div>
+          <p class="eyebrow">редактор кадра</p>
+          <h2 id="image-editor-title">Обрезать фотографию</h2>
+        </div>
+        <button type="button" id="image-editor-close" aria-label="Закрыть редактор">×</button>
+      </div>
+      <div class="image-editor-preview">
+        <canvas id="image-editor-canvas"></canvas>
+      </div>
+      <div class="image-editor-controls">
+        <label>
+          Формат
+          <select id="image-editor-ratio">
+            <option value="original">Исходный</option>
+            <option value="1">Квадрат 1:1</option>
+            <option value="0.75">Вертикальный 3:4</option>
+            <option value="1.333333">Горизонтальный 4:3</option>
+            <option value="1.777778">Широкий 16:9</option>
+          </select>
+        </label>
+        <label>
+          Масштаб
+          <input type="range" id="image-editor-zoom" min="1" max="3" step="0.01" value="1" />
+        </label>
+        <label>
+          По горизонтали
+          <input type="range" id="image-editor-x" min="-100" max="100" step="1" value="0" />
+        </label>
+        <label>
+          По вертикали
+          <input type="range" id="image-editor-y" min="-100" max="100" step="1" value="0" />
+        </label>
+      </div>
+      <div class="image-editor-actions">
+        <button type="button" id="image-editor-cancel">Отмена</button>
+        <button class="primary" type="button" id="image-editor-save">Сохранить обрезку</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js?v=20260723-1425" defer></script>
 </body>
 </html>
