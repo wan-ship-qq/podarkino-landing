@@ -41,11 +41,12 @@
     }
   },
   "reviews": [
-    "assets/reviews/review-iraida-2026-04-19.jpg",
-    "assets/reviews/review-tatiana-2026-01-30.jpg",
-    "assets/reviews/review-vixen-2026-02-24.jpg",
-    "assets/reviews/review-olga-2026-06-11.jpg",
-    "assets/reviews/review-pavel-2025-11-28.jpg"
+    "assets/reviews/review-iraida-2026-04-19.webp",
+    "assets/reviews/review-tatiana-2026-01-30.webp",
+    "assets/reviews/review-vixen-2026-02-24.webp",
+    "assets/reviews/review-olga-2026-06-11.webp",
+    "assets/reviews/review-pavel-2025-11-28.webp",
+    "assets/reviews/review-katerina-2025-12-26.webp"
   ],
   "footerText": "Вкусные подарочные наборы, которые легко выбрать и приятно дарить."
 }

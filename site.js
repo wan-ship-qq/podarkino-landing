@@ -1,4 +1,4 @@
-const assetVersion = "20260723-1455";
+const assetVersion = "20260723-1515";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
