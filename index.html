@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260723-1425" />
+  <link rel="stylesheet" href="styles.css?v=20260723-1450" />
 </head>
 <body>
   <header class="topbar">
@@ -28,6 +28,13 @@
       <a href="#reviews">Отзывы</a>
       <a href="#contacts">Контакты</a>
     </nav>
+    <button class="cart-trigger" type="button" data-cart-open aria-label="Открыть корзину">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7M10 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm9 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+      </svg>
+      <span>Корзина</span>
+      <b class="cart-count" data-cart-count aria-live="polite">0</b>
+    </button>
   </header>
 
   <main>
@@ -146,6 +153,63 @@
     <b>Подаркино</b>
     <p data-content="footerText">Вкусные подарочные наборы, которые легко выбрать и приятно дарить.</p>
   </footer>
-  <script src="site.js?v=20260723-1425" defer></script>
+
+  <div class="cart-modal" data-cart-modal hidden>
+    <button class="cart-backdrop" type="button" data-cart-close aria-label="Закрыть корзину"></button>
+    <section class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <header class="cart-head">
+        <div>
+          <p class="eyebrow">ваш заказ</p>
+          <h2 id="cart-title">Корзина</h2>
+        </div>
+        <button class="cart-close" type="button" data-cart-close aria-label="Закрыть корзину">&times;</button>
+      </header>
+
+      <div class="cart-layout">
+        <div class="cart-products">
+          <div class="cart-empty" data-cart-empty>
+            <span aria-hidden="true">🛍️</span>
+            <h3>Корзина пока пуста</h3>
+            <p>Добавьте подходящие наборы из витрины.</p>
+            <button class="btn primary" type="button" data-cart-shop>Выбрать набор</button>
+          </div>
+          <div class="cart-items" data-cart-items></div>
+          <div class="cart-total" data-cart-total-row hidden>
+            <span>Общая сумма</span>
+            <strong data-cart-total>0 ₽</strong>
+          </div>
+        </div>
+
+        <form class="checkout-form" data-checkout-form>
+          <h3>Данные получателя</h3>
+          <label>
+            ФИО
+            <input type="text" name="customerName" autocomplete="name" required placeholder="Иванов Иван Иванович" />
+          </label>
+          <label>
+            Телефон
+            <input type="tel" name="customerPhone" autocomplete="tel" required inputmode="tel" placeholder="+7 900 000-00-00" />
+          </label>
+          <label>
+            Электронная почта
+            <input type="email" name="customerEmail" autocomplete="email" required placeholder="name@example.ru" />
+          </label>
+
+          <fieldset class="payment-methods">
+            <legend>Способ оплаты</legend>
+            <label><input type="radio" name="payment" value="СБП" checked /> <span><b>По СБП</b><small>по номеру телефона или QR-коду</small></span></label>
+            <label><input type="radio" name="payment" value="Банковской картой" /> <span><b>Банковской картой</b><small>после подтверждения заказа</small></span></label>
+            <label><input type="radio" name="payment" value="Наличными при получении" /> <span><b>Наличными</b><small>при получении, если доступно</small></span></label>
+          </fieldset>
+
+          <button class="checkout-submit" type="submit">Оформить заказ</button>
+          <p class="checkout-note">После нажатия откроется письмо с готовым заказом. Менеджер свяжется с вами, подтвердит наличие и оплату.</p>
+          <p class="checkout-status" data-checkout-status role="status"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="site.js?v=20260723-1450" defer></script>
 </body>
 </html>
