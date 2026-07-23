@@ -1,4 +1,9 @@
-const assetVersion = "20260721-0249";
+const assetVersion = "20260723-1305";
+
+function versionedAsset(source) {
+  if (typeof source !== "string" || !source.startsWith("assets/")) return source;
+  return `${source.split("?")[0]}?v=${assetVersion}`;
+}
 
 const fallbackProducts = [
   {
@@ -70,7 +75,7 @@ function productCard(product) {
 
   if (product.image) {
     const image = document.createElement("img");
-    image.src = product.image;
+    image.src = versionedAsset(product.image);
     image.alt = product.title || "Подарок из магазина Подаркино";
     image.loading = "lazy";
     image.dataset.imageViewer = "off";
@@ -136,7 +141,9 @@ function showProductImage(index) {
 
 function openProductViewer(product) {
   productLastFocusedElement = document.activeElement;
-  const sources = [product.viewerImage || product.image, ...(Array.isArray(product.images) ? product.images : [])].filter(Boolean);
+  const sources = [product.viewerImage || product.image, ...(Array.isArray(product.images) ? product.images : [])]
+    .filter(Boolean)
+    .map(versionedAsset);
   activeProductImages = sources.map((src, index) => ({
     src,
     alt: `${product.title || "Подарочный набор"}${index ? `, фото ${index + 1}` : ""}`
