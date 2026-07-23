@@ -20,8 +20,6 @@ const contentFields = [
   ["heroTitle", "Главный заголовок", "textarea"],
   ["heroLead", "Текст под главным заголовком", "textarea"],
   ["productsTitle", "Заголовок блока товаров", "textarea"],
-  ["storyTitle", "Заголовок истории", "textarea"],
-  ["storyText", "Текст истории", "textarea"],
   ["footerText", "Текст в подвале", "textarea"]
 ];
 
