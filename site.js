@@ -1,4 +1,4 @@
-const assetVersion = "20260723-1528";
+const assetVersion = "20260723-1535";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -9,6 +9,9 @@ const fallbackProducts = [
   {
     title: "Подарочный набор орехов в шоколаде",
     description: "Ореховое ассорти для учителя, воспитателя, близких людей и уютного чаепития.",
+    composition: "Арахис в кунжуте, арахис в шоколаде, арахис в белом шоколаде, миндаль в шоколаде, миндаль в белом шоколаде",
+    weight: "400 г",
+    price: "820 ₽",
     image: "assets/nuts-in-chocolate-box-3d.png?v=20260720-1837",
     viewerImage: "assets/nuts-in-chocolate-box-full.jpg?v=20260720-1855",
     images: [
