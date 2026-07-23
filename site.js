@@ -1,4 +1,4 @@
-const assetVersion = "20260723-1535";
+const assetVersion = "20260723-1550";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -305,20 +305,7 @@ function productCard(product) {
   box.append(imageWrap);
   box.addEventListener("click", () => openProductViewer(product));
 
-  const actions = document.createElement("div");
-  actions.className = "product-card-actions";
-  const price = document.createElement("span");
-  price.className = "product-card-price";
-  price.textContent = displayPrice(product.price);
-  const add = document.createElement("button");
-  add.className = "add-to-cart";
-  add.type = "button";
-  add.textContent = "В корзину";
-  add.setAttribute("aria-label", `Добавить в корзину: ${product.title || "Подарочный набор"}`);
-  add.addEventListener("click", () => addToCart(product));
-  actions.append(price, add);
-
-  article.append(box, actions);
+  article.append(box);
   return article;
 }
 
