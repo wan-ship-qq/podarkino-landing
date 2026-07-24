@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260724-1030" />
+  <link rel="stylesheet" href="styles.css?v=20260724-1105" />
 </head>
 <body>
   <header class="topbar">
@@ -21,13 +21,17 @@
       <img class="brand-logo" src="assets/podarkino-logo-outline.png" alt="" />
       <span>Подаркино</span>
     </a>
-    <nav class="nav" aria-label="Навигация">
+    <nav class="nav" id="site-navigation" aria-label="Навигация" data-site-navigation>
       <a href="#sets">Наборы</a>
       <a href="#for-whom">Кому дарить</a>
       <a href="#reviews">Отзывы</a>
       <a href="#delivery">Доставка</a>
       <a href="#contacts">Контакты</a>
     </nav>
+    <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-navigation">
+      <span class="menu-toggle-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>Меню</span>
+    </button>
     <button class="cart-trigger" type="button" data-cart-open aria-label="Открыть корзину">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7M10 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm9 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
@@ -245,6 +249,6 @@
     </section>
   </div>
 
-  <script src="site.js?v=20260724-1010" defer></script>
+  <script src="site.js?v=20260724-1105" defer></script>
 </body>
 </html>

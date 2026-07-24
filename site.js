@@ -70,6 +70,8 @@ const productsRoot = document.querySelector("[data-products]");
 const defaultContent = {};
 const cartStorageKey = "podarkinoCart";
 const orderEmail = "shakhtar142@yandex.com";
+const menuToggle = document.querySelector("[data-menu-toggle]");
+const siteNavigation = document.querySelector("[data-site-navigation]");
 const cartModal = document.querySelector("[data-cart-modal]");
 const cartItemsRoot = document.querySelector("[data-cart-items]");
 const cartEmpty = document.querySelector("[data-cart-empty]");
@@ -82,6 +84,30 @@ const checkoutForm = document.querySelector("[data-checkout-form]");
 const checkoutStatus = document.querySelector("[data-checkout-status]");
 let cart = loadCart();
 let cartLastFocusedElement = null;
+
+function closeMobileMenu() {
+  if (!menuToggle || !siteNavigation) return;
+  menuToggle.setAttribute("aria-expanded", "false");
+  siteNavigation.dataset.open = "false";
+}
+
+menuToggle?.addEventListener("click", () => {
+  const willOpen = menuToggle.getAttribute("aria-expanded") !== "true";
+  menuToggle.setAttribute("aria-expanded", String(willOpen));
+  siteNavigation.dataset.open = String(willOpen);
+});
+
+siteNavigation?.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", closeMobileMenu);
+});
+
+document.addEventListener("click", (event) => {
+  if (!siteNavigation?.contains(event.target) && !menuToggle?.contains(event.target)) closeMobileMenu();
+});
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 980) closeMobileMenu();
+});
 
 function productId(product) {
   return String(product.id || product.title || "gift")
@@ -310,6 +336,7 @@ checkoutForm?.addEventListener("submit", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeMobileMenu();
   if (event.key === "Escape" && cartModal && !cartModal.hidden) closeCart();
 });
 
