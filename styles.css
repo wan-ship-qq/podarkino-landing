@@ -187,6 +187,14 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
 .review-card{display:grid;align-content:start;overflow:hidden;margin:0;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:var(--shadow)}
 .review-card img{display:block;width:100%;height:auto;aspect-ratio:4/3;background:#fff;object-fit:contain}
 .review-card figcaption{padding:14px 16px;color:var(--muted);font-size:14px;font-weight:700}
+.delivery-section{padding-top:48px}
+.delivery-section .section-head p:last-child{max-width:680px;margin:18px auto 0}
+.delivery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.delivery-card{position:relative;min-height:210px;padding:26px 22px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,253,248,.96),rgba(247,234,216,.78));box-shadow:0 16px 44px rgba(58,35,24,.1);overflow:hidden}
+.delivery-card:after{content:"";position:absolute;right:-38px;bottom:-52px;width:130px;height:130px;border-radius:50%;background:rgba(199,130,58,.11)}
+.delivery-number{position:relative;z-index:1;display:grid;place-items:center;width:48px;height:48px;margin-bottom:30px;border-radius:50%;background:var(--caramel);color:#fff;font-size:12px;font-weight:900;letter-spacing:.08em;box-shadow:0 12px 24px rgba(167,97,46,.22)}
+.delivery-card h3{position:relative;z-index:1;margin:0 0 9px;color:var(--cocoa);font-family:"Playfair Display",Georgia,serif;font-size:25px;line-height:1.1}
+.delivery-card p{position:relative;z-index:1;margin:0;color:var(--muted);font-size:14px}
 .contacts{max-width:var(--max);margin:0 auto 18px;padding:54px 24px;text-align:center;border-radius:30px;background:linear-gradient(135deg,rgba(255,253,248,.96),rgba(240,219,190,.62));border:1px solid rgba(255,255,255,.75);box-shadow:var(--shadow)}
 .contacts p{max-width:680px;margin-left:auto;margin-right:auto}
 .contact-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:840px;margin:26px auto 0}
@@ -260,6 +268,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .feature-strip article:first-child{grid-column:1/-1}
   .story-card{grid-template-columns:1fr}
   .occasion-grid{grid-template-columns:repeat(2,1fr)}
+  .delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .product-viewer{place-items:start center}
   .product-viewer-layout{grid-template-columns:1fr}
   .product-viewer-stage{width:min(100%,420px)}
@@ -312,6 +321,11 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradie
   .reviews-grid{display:flex;gap:12px;margin:0 -14px;padding:0 14px;overflow-x:auto;scroll-snap-type:x mandatory}
   .review-card{flex:0 0 78%;scroll-snap-align:center}
   .review-card img{height:auto}
+  .delivery-section{padding-top:36px}
+  .delivery-section .section-head p:last-child{margin-top:14px}
+  .delivery-grid{grid-template-columns:1fr;gap:10px}
+  .delivery-card{min-height:0;padding:20px}
+  .delivery-number{width:42px;height:42px;margin-bottom:20px}
   .contacts{margin:0 14px 18px;padding:40px 20px;border-radius:24px}
   .contact-links{display:grid;gap:10px}
   .contact-links a{width:100%}
