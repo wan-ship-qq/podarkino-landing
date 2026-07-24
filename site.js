@@ -1,4 +1,4 @@
-const assetVersion = "20260724-0958";
+const assetVersion = "20260724-1005";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -149,7 +149,6 @@ function addToCart(product) {
   }
   saveCart();
   renderCart();
-  openCart();
 }
 
 function changeCartQuantity(id, change) {
@@ -227,6 +226,7 @@ function renderCart() {
   checkoutForm.toggleAttribute("inert", cart.length === 0);
   checkoutForm.classList.toggle("is-disabled", cart.length === 0);
   checkoutStatus.textContent = "";
+  renderProductCartControl();
 }
 
 function openCart() {
@@ -340,7 +340,14 @@ productViewer.innerHTML = `
           <div class="product-fact"><span>Масса</span><b data-product-weight></b></div>
           <div class="product-fact"><span>Цена</span><b data-product-price></b></div>
         </div>
-        <button class="product-viewer-cart" type="button">В корзину</button>
+        <div class="product-viewer-purchase">
+          <button class="product-viewer-cart" type="button">В корзину</button>
+          <div class="product-viewer-quantity" role="group" aria-label="Количество товара" hidden>
+            <button type="button" data-product-cart-minus aria-label="Уменьшить количество">−</button>
+            <b data-product-cart-quantity aria-live="polite">1</b>
+            <button type="button" data-product-cart-plus aria-label="Увеличить количество">+</button>
+          </div>
+        </div>
         <nav class="product-switcher" aria-label="Переключение наборов">
           <button class="product-switcher-button" type="button" data-product-previous aria-label="Предыдущий набор">&#8592; Предыдущий</button>
           <span class="product-switcher-count" data-product-count aria-live="polite"></span>
@@ -361,12 +368,33 @@ const productViewerCaption = productViewer.querySelector(".product-viewer-captio
 const productPrevious = productViewer.querySelector("[data-product-previous]");
 const productNext = productViewer.querySelector("[data-product-next]");
 const productCount = productViewer.querySelector("[data-product-count]");
+const productCartButton = productViewer.querySelector(".product-viewer-cart");
+const productCartQuantity = productViewer.querySelector(".product-viewer-quantity");
+const productCartMinus = productViewer.querySelector("[data-product-cart-minus]");
+const productCartCount = productViewer.querySelector("[data-product-cart-quantity]");
+const productCartPlus = productViewer.querySelector("[data-product-cart-plus]");
 let activeProductImages = [];
 let activeProductImageIndex = 0;
 let productLastFocusedElement = null;
 let productTouchStartX = null;
 let activeProduct = null;
 let viewerProducts = [];
+
+function renderProductCartControl() {
+  if (!activeProduct) {
+    productCartButton.hidden = false;
+    productCartQuantity.hidden = true;
+    return;
+  }
+  const item = cart.find((value) => value.id === productId(activeProduct));
+  const quantity = item?.quantity || 0;
+  productCartButton.hidden = quantity > 0;
+  productCartQuantity.hidden = quantity === 0;
+  productCartCount.textContent = quantity || 1;
+  productCartMinus.setAttribute("aria-label", `Уменьшить количество: ${activeProduct.title}`);
+  productCartPlus.setAttribute("aria-label", `Увеличить количество: ${activeProduct.title}`);
+  productCartCount.setAttribute("aria-label", `Количество: ${quantity || 1}`);
+}
 
 function showProductImage(index) {
   if (!activeProductImages.length) return;
@@ -410,6 +438,7 @@ function openProductViewer(product) {
   productPrevious.hidden = singleProduct;
   productNext.hidden = singleProduct;
   productCount.hidden = singleProduct;
+  renderProductCartControl();
   showProductImage(0);
   productViewer.hidden = false;
   document.body.classList.add("viewer-open");
@@ -434,11 +463,23 @@ function closeProductViewer() {
 }
 
 productViewerClose.addEventListener("click", closeProductViewer);
-productViewer.querySelector(".product-viewer-cart").addEventListener("click", () => {
+productCartButton.addEventListener("click", () => {
   if (!activeProduct) return;
-  const product = activeProduct;
-  closeProductViewer();
-  addToCart(product);
+  addToCart(activeProduct);
+  productCartPlus.focus();
+});
+productCartMinus.addEventListener("click", () => {
+  if (!activeProduct) return;
+  const id = productId(activeProduct);
+  const quantity = cart.find((item) => item.id === id)?.quantity || 0;
+  changeCartQuantity(id, -1);
+  if (quantity <= 1) productCartButton.focus();
+  else productCartMinus.focus();
+});
+productCartPlus.addEventListener("click", () => {
+  if (!activeProduct) return;
+  addToCart(activeProduct);
+  productCartPlus.focus();
 });
 productViewerPrevious.addEventListener("click", () => showProductImage(activeProductImageIndex - 1));
 productViewerNext.addEventListener("click", () => showProductImage(activeProductImageIndex + 1));
