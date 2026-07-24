@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260724-1005" />
+  <link rel="stylesheet" href="styles.css?v=20260724-1010" />
 </head>
 <body>
   <header class="topbar">
@@ -162,9 +162,19 @@
             <button class="btn primary" type="button" data-cart-shop>Выбрать набор</button>
           </div>
           <div class="cart-items" data-cart-items></div>
-          <div class="cart-total" data-cart-total-row hidden>
-            <span>Общая сумма</span>
-            <strong data-cart-total>0 ₽</strong>
+          <div class="cart-summary" data-cart-total-row hidden>
+            <div class="cart-summary-row">
+              <span>Сумма товаров</span>
+              <strong data-cart-subtotal>0 ₽</strong>
+            </div>
+            <div class="cart-summary-row">
+              <span>Доставка</span>
+              <strong data-cart-delivery>Рассчитывается</strong>
+            </div>
+            <div class="cart-summary-row cart-summary-grand">
+              <span>Итого с доставкой</span>
+              <strong data-cart-total>0 ₽ + доставка</strong>
+            </div>
           </div>
         </div>
 
@@ -187,6 +197,14 @@
             <span>Согласие на обработку персональных данных</span>
           </label>
 
+          <fieldset class="delivery-methods">
+            <legend>Способ доставки</legend>
+            <label><input type="radio" name="delivery" value="Яндекс Курьер" checked required /> <span><b>Яндекс Курьер</b><small>стоимость рассчитывается после подтверждения</small></span></label>
+            <label><input type="radio" name="delivery" value="СДЭК" /> <span><b>СДЭК</b><small>доставка в пункт выдачи</small></span></label>
+            <label><input type="radio" name="delivery" value="Почта" /> <span><b>Почта</b><small>доставка в почтовое отделение</small></span></label>
+            <label><input type="radio" name="delivery" value="Самовывоз" /> <span><b>Самовывоз</b><small>бесплатно</small></span></label>
+          </fieldset>
+
           <fieldset class="payment-methods">
             <legend>Способ оплаты</legend>
             <label><input type="radio" name="payment" value="СБП" checked /> <span><b>По СБП</b><small>по номеру телефона или QR-коду</small></span></label>
@@ -202,6 +220,6 @@
     </section>
   </div>
 
-  <script src="site.js?v=20260724-1005" defer></script>
+  <script src="site.js?v=20260724-1010" defer></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const assetVersion = "20260724-1005";
+const assetVersion = "20260724-1010";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -74,6 +74,8 @@ const cartModal = document.querySelector("[data-cart-modal]");
 const cartItemsRoot = document.querySelector("[data-cart-items]");
 const cartEmpty = document.querySelector("[data-cart-empty]");
 const cartTotalRow = document.querySelector("[data-cart-total-row]");
+const cartSubtotal = document.querySelector("[data-cart-subtotal]");
+const cartDelivery = document.querySelector("[data-cart-delivery]");
 const cartTotal = document.querySelector("[data-cart-total]");
 const cartCount = document.querySelector("[data-cart-count]");
 const checkoutForm = document.querySelector("[data-checkout-form]");
@@ -130,6 +132,24 @@ function cartSummary() {
       ? (knownTotal ? `${displayPrice(knownTotal)} + цена уточняется` : "Уточняется")
       : displayPrice(knownTotal)
   };
+}
+
+function deliverySummary(summary = cartSummary()) {
+  const method = checkoutForm?.querySelector('input[name="delivery"]:checked')?.value || "Яндекс Курьер";
+  const isPickup = method === "Самовывоз";
+  return {
+    method,
+    text: isPickup ? displayPrice(0) : "Рассчитывается",
+    totalText: isPickup ? summary.text : `${summary.text} + доставка`
+  };
+}
+
+function renderCartTotals() {
+  const summary = cartSummary();
+  const delivery = deliverySummary(summary);
+  cartSubtotal.textContent = summary.text;
+  cartDelivery.textContent = delivery.text;
+  cartTotal.textContent = delivery.totalText;
 }
 
 function addToCart(product) {
@@ -222,7 +242,7 @@ function renderCart() {
   cartEmpty.hidden = cart.length > 0;
   cartItemsRoot.replaceChildren(...cart.map(cartItemElement));
   cartTotalRow.hidden = cart.length === 0;
-  cartTotal.textContent = cartSummary().text;
+  renderCartTotals();
   checkoutForm.toggleAttribute("inert", cart.length === 0);
   checkoutForm.classList.toggle("is-disabled", cart.length === 0);
   checkoutStatus.textContent = "";
@@ -246,6 +266,9 @@ function closeCart() {
 
 document.querySelector("[data-cart-open]")?.addEventListener("click", openCart);
 document.querySelectorAll("[data-cart-close]").forEach((button) => button.addEventListener("click", closeCart));
+checkoutForm?.querySelectorAll('input[name="delivery"]').forEach((input) => {
+  input.addEventListener("change", renderCartTotals);
+});
 document.querySelector("[data-cart-shop]")?.addEventListener("click", () => {
   closeCart();
   document.querySelector("#sets")?.scrollIntoView({ behavior: "smooth" });
@@ -261,6 +284,7 @@ checkoutForm?.addEventListener("submit", (event) => {
 
   const data = new FormData(checkoutForm);
   const summary = cartSummary();
+  const delivery = deliverySummary(summary);
   const lines = cart.map((item, index) => {
     const itemTotal = item.unitPrice === null ? (item.priceText || "цена уточняется") : displayPrice(item.unitPrice * item.quantity);
     return `${index + 1}. ${item.title} — ${item.quantity} шт. — ${itemTotal}`;
@@ -270,7 +294,10 @@ checkoutForm?.addEventListener("submit", (event) => {
     "",
     ...lines,
     "",
-    `Общая сумма: ${summary.text}`,
+    `Сумма товаров: ${summary.text}`,
+    `Способ доставки: ${delivery.method}`,
+    `Доставка: ${delivery.text}`,
+    `Итого с доставкой: ${delivery.totalText}`,
     `Способ оплаты: ${data.get("payment")}`,
     "",
     `ФИО: ${data.get("customerName")}`,
