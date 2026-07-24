@@ -60,6 +60,9 @@
   {
     "title": "Подарочный набор сладостей «С днём рождения!»",
     "description": "Праздничный набор сладостей для душевного поздравления с днём рождения.",
+    "composition": "Чай «Наглый фрукт», арахис в шоколаде, клюква в шоколаде, Twix, Nuts",
+    "weight": "300 г",
+    "price": "850 ₽",
     "image": "assets/sweets-birthday-box-3d.png?v=20260720-1941",
     "viewerImage": "assets/sweets-birthday-box-full.jpg?v=20260720-1941",
     "images": [
