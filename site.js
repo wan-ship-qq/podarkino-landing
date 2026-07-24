@@ -1,4 +1,4 @@
-const assetVersion = "20260723-1602";
+const assetVersion = "20260724-0920";
 
 function versionedAsset(source) {
   if (typeof source !== "string" || !source.startsWith("assets/")) return source;
@@ -45,6 +45,9 @@ const fallbackProducts = [
   {
     title: "Подарочный набор сладостей «Нежность»",
     description: "Нежный сладкий подарок для близкого человека, душевного поздравления или знака внимания.",
+    composition: "Вишня в шоколаде, мармелад в карамельной глазури, конфеты «Адель»",
+    weight: "200 г",
+    price: "670 ₽",
     image: "assets/sweets-tenderness-box-3d.png?v=20260720-1925",
     viewerImage: "assets/sweets-tenderness-box-full.jpg?v=20260720-1925",
     images: [
