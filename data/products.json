@@ -95,6 +95,9 @@
   {
     "title": "Подарочный набор солёных орехов",
     "description": "Ассорти солёных орехов ручной фасовки — готовая закуска и подарок.",
+    "composition": "Арахис в хрустящей корочке — 4 вкуса",
+    "weight": "305 г",
+    "price": "780 ₽",
     "image": "assets/salted-nuts-box-3d.png?v=20260720-2002",
     "viewerImage": "assets/salted-nuts-box-full.jpg?v=20260720-2002",
     "images": [
