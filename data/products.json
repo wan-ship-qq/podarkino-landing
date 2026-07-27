@@ -30,16 +30,24 @@
     "weight": "200 г",
     "price": "560 ₽",
     "image": "assets/sweets-heart-box-3d.png?v=20260720-1907",
-    "viewerImage": "assets/sweets-heart-box-full.jpg?v=20260720-1907",
+    "viewerImage": "assets/admin/sweets-heart-box-full-crop-6115b91c-5b0f-4dc2-9222-f98caa569a7d.webp",
     "images": [
-      "assets/sweets-heart-detail-1.jpg",
-      "assets/sweets-heart-detail-2.jpg",
-      "assets/sweets-heart-detail-3.jpg",
-      "assets/sweets-heart-detail-4.jpg",
-      "assets/sweets-heart-detail-5.jpg"
+      "assets/admin/sweets-heart-detail-1-crop-fa230c58-149d-4aad-a2f6-d054dda0f8d9.webp",
+      "assets/admin/sweets-heart-detail-2-crop-ff59e18b-df5e-4088-95ce-83c39565d17c.webp",
+      "assets/admin/sweets-heart-detail-3-crop-8630248d-47fd-4830-84e0-0f63f5ccd3f8.webp",
+      "assets/admin/sweets-heart-detail-5-crop-c577faf2-79cc-4724-b795-e1e925ea5db9.webp",
+      "assets/admin/sweets-heart-detail-4-crop-099a1421-1863-44c3-8947-c0c00ad1182b.webp"
     ],
     "badge": "новинка",
-    "visible": true
+    "visible": true,
+    "imageCaption": "",
+    "imageCaptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
   },
   {
     "title": "Подарочный набор сладостей «Нежность»",
