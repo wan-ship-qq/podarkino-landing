@@ -128,17 +128,22 @@
     "weight": "305 г",
     "price": "780 ₽",
     "image": "assets/salted-nuts-box-3d.png?v=20260720-2002",
-    "viewerImage": "assets/salted-nuts-box-full.jpg?v=20260720-2002",
+    "viewerImage": "assets/admin/salted-nuts-box-full-crop-b76dcec9-6374-4e4c-bb36-e9efd04778b4.webp",
     "images": [
-      "assets/salted-nuts-detail-1.jpg",
-      "assets/salted-nuts-detail-2.jpg",
-      "assets/salted-nuts-detail-3.jpg",
-      "assets/salted-nuts-detail-4.jpg",
-      "assets/salted-nuts-detail-5.jpg",
-      "assets/salted-nuts-detail-6.jpg"
+      "assets/admin/salted-nuts-detail-3-crop-a50bff31-c664-493e-96fc-d80d4923e4bf.webp",
+      "assets/admin/salted-nuts-detail-6-crop-a6758bac-47a0-41b8-9236-c0c694eca946.webp",
+      "assets/admin/salted-nuts-detail-4-crop-5ba94940-c49c-4e0f-b21c-b40e2fdb9106.webp",
+      "assets/admin/salted-nuts-detail-1-crop-6d7da106-d64d-4517-b9a8-f964508d2c73.webp"
     ],
     "badge": "орехи",
-    "visible": true
+    "visible": true,
+    "imageCaption": "",
+    "imageCaptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
   },
   {
     "title": "Подарочный набор чая Витаминный",
