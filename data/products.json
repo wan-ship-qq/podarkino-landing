@@ -234,13 +234,19 @@
     "weight": "785 г",
     "price": "1850 ₽",
     "image": "assets/large-tea-and-sweets-box-3d.png?v=20260720-2039",
-    "viewerImage": "assets/large-tea-and-sweets-box-full.jpg?v=20260720-2039",
+    "viewerImage": "assets/admin/large-tea-and-sweets-box-full-crop-7c4a9bbd-3bf5-4ae3-990f-39f60d1aec93.webp",
     "images": [
-      "assets/large-tea-and-sweets-detail-1.jpg",
-      "assets/large-tea-and-sweets-detail-2.jpg",
-      "assets/large-tea-and-sweets-detail-3.jpg"
+      "assets/admin/large-tea-and-sweets-detail-2-crop-c8403aff-541f-42c7-8055-279b22f449da.webp",
+      "assets/admin/large-tea-and-sweets-detail-1-crop-97b32012-2b44-4fba-beac-0c78fdba97eb.webp",
+      "assets/admin/large-tea-and-sweets-detail-3-crop-a1d98796-336d-444c-acd8-52640ea1b10f.webp"
     ],
     "badge": "большой набор",
-    "visible": true
+    "visible": true,
+    "imageCaption": "",
+    "imageCaptions": [
+      "",
+      "",
+      ""
+    ]
   }
 ]
