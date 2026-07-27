@@ -1,13 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "podarkino-admin-access",
-  "main": ".open-next/worker.js",
+  "main": "vinext/server/fetch-handler",
   "compatibility_date": "2025-12-02",
   "compatibility_flags": [
     "nodejs_compat"
   ],
   "assets": {
-    "directory": ".open-next/assets",
+    "directory": "dist/client",
+    "not_found_handling": "none",
     "binding": "ASSETS"
-  }
+  },
+  "cache": { "enabled": true }
 }
