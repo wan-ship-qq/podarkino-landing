@@ -210,17 +210,22 @@
     "weight": "300 г",
     "price": "790 ₽",
     "image": "assets/tea-and-sweets-box-3d.png?v=20260720-2021",
-    "viewerImage": "assets/tea-and-sweets-box-full.jpg?v=20260720-2021",
+    "viewerImage": "assets/admin/tea-and-sweets-box-full-crop-c9be6585-2009-4e25-82fa-04310fee4ef1.webp",
     "images": [
-      "assets/tea-and-sweets-detail-1.jpg",
-      "assets/tea-and-sweets-detail-2.jpg",
-      "assets/tea-and-sweets-detail-3.jpg",
-      "assets/tea-and-sweets-detail-4.jpg",
-      "assets/tea-and-sweets-detail-5.jpg",
-      "assets/tea-and-sweets-detail-6.jpg"
+      "assets/admin/tea-and-sweets-detail-6-crop-217b82d3-5582-4690-85ac-2b8516827163.webp",
+      "assets/admin/tea-and-sweets-detail-4-crop-9ea76230-e16f-4db0-9fa0-d1827107b860.webp",
+      "assets/admin/tea-and-sweets-detail-2-crop-0e968399-0571-4af8-89eb-7325b555f291.webp",
+      "assets/admin/tea-and-sweets-detail-1-crop-8193bcf7-4294-4c27-8936-bfee03eda035.webp"
     ],
     "badge": "подарок",
-    "visible": true
+    "visible": true,
+    "imageCaption": "",
+    "imageCaptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
   },
   {
     "title": "Большой Подарочный набор чая и сладостей",
