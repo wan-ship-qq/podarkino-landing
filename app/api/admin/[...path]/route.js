@@ -1,5 +1,9 @@
 const UPSTREAM = "https://podarkino-admin-api.wannahi459.workers.dev";
 const ADMIN_ORIGIN = "https://wan-ship-qq.github.io";
+const ADMIN_ORIGINS = new Set([
+  ADMIN_ORIGIN,
+  "https://podarkino-admin-access.foku1337.chatgpt.site"
+]);
 
 function corsHeaders(origin) {
   const headers = {
@@ -9,7 +13,7 @@ function corsHeaders(origin) {
     "Cache-Control": "no-store",
     Vary: "Origin"
   };
-  if (origin === ADMIN_ORIGIN) headers["Access-Control-Allow-Origin"] = origin;
+  if (ADMIN_ORIGINS.has(origin)) headers["Access-Control-Allow-Origin"] = origin;
   return headers;
 }
 
@@ -20,7 +24,7 @@ export async function OPTIONS(request) {
 
 async function proxy(request, context) {
   const origin = request.headers.get("origin") || "";
-  if (origin !== ADMIN_ORIGIN) {
+  if (origin && !ADMIN_ORIGINS.has(origin)) {
     return Response.json(
       { error: "Origin denied" },
       { status: 403, headers: corsHeaders(origin) }
