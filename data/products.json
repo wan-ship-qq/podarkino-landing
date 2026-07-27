@@ -152,19 +152,28 @@
     "weight": "230 г",
     "price": "580 ₽",
     "image": "assets/vitamin-tea-box-3d.png?v=20260720-2015",
-    "viewerImage": "assets/vitamin-tea-box-full.jpg?v=20260720-2015",
+    "viewerImage": "assets/admin/vitamin-tea-box-full-crop-941b3893-8eb0-44dc-bc6b-dfd5fdf83a86.webp",
     "images": [
-      "assets/vitamin-tea-detail-1.jpg",
-      "assets/vitamin-tea-detail-2.jpg",
-      "assets/vitamin-tea-detail-3.jpg",
-      "assets/vitamin-tea-detail-4.jpg",
-      "assets/vitamin-tea-detail-5.jpg",
-      "assets/vitamin-tea-detail-6.jpg",
-      "assets/vitamin-tea-detail-7.jpg",
-      "assets/vitamin-tea-detail-8.jpg"
+      "assets/admin/vitamin-tea-detail-2-crop-c9fb46d3-0824-4c43-9a34-ef70aa51055b.webp",
+      "assets/admin/vitamin-tea-detail-3-crop-b450f0db-d00a-4ada-ad8a-ea6150cb4eed.webp",
+      "assets/admin/vitamin-tea-detail-4-crop-6f97c291-9458-40e0-990b-65b7e01f1431.webp",
+      "assets/admin/vitamin-tea-detail-5-crop-060165e3-7be4-4b3f-9b6c-8db53b497234.webp",
+      "assets/admin/vitamin-tea-detail-6-crop-4741fa8b-daf8-45b1-ad54-4e0b31e46595.webp",
+      "assets/admin/vitamin-tea-detail-7-crop-5c24f276-ac5b-4942-8532-f7aec58d4773.webp",
+      "assets/admin/vitamin-tea-detail-1-crop-52e6c37a-6baf-45be-abff-f35e63b2f767.webp"
     ],
     "badge": "чай",
-    "visible": true
+    "visible": true,
+    "imageCaption": "",
+    "imageCaptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
   },
   {
     "title": "Подарочный набор чая Ягодный",
