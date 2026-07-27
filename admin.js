@@ -1,4 +1,4 @@
-const API_URL = "https://podarkino-admin-api.wannahi459.workers.dev";
+const API_URL = "https://podarkino-admin-access.foku1337.chatgpt.site/api/admin-v2";
 const SESSION_KEY = "podarkinoAdminSession";
 
 const productDefaults = {
@@ -91,7 +91,9 @@ function sessionToken() {
 async function apiRequest(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
   if (sessionToken()) headers.Authorization = `Bearer ${sessionToken()}`;
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers, cache: "no-store" });
+  const requestUrl = new URL(`${API_URL}${path}`);
+  requestUrl.searchParams.set("_", Date.now().toString());
+  const response = await fetch(requestUrl, { ...options, headers, cache: "no-store" });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
     if (response.status === 401 && path !== "/login") showLogin("Сессия завершена. Войдите снова.");
