@@ -1,8 +1,4 @@
-const GATEWAY_ORIGIN = "https://podarkino-admin-access.foku1337.chatgpt.site";
-const SITE_ORIGIN = "https://wan-ship-qq.github.io/podarkino-landing";
-const API_URL = window.location.origin === GATEWAY_ORIGIN
-  ? "/api/admin-v2"
-  : `${GATEWAY_ORIGIN}/api/admin-v2`;
+const API_URL = "https://podarkino-admin-api.wannahi459.workers.dev";
 const SESSION_KEY = "podarkinoAdminSession";
 
 const productDefaults = {
@@ -92,17 +88,10 @@ function sessionToken() {
   return sessionStorage.getItem(SESSION_KEY) || "";
 }
 
-function mediaUrl(source) {
-  if (!source || /^(?:[a-z]+:|\/\/|data:|blob:)/i.test(source)) return source;
-  return `${SITE_ORIGIN}/${String(source).replace(/^\.?\//, "")}`;
-}
-
 async function apiRequest(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
   if (sessionToken()) headers.Authorization = `Bearer ${sessionToken()}`;
-  const requestUrl = new URL(`${API_URL}${path}`, window.location.origin);
-  requestUrl.searchParams.set("_", Date.now().toString());
-  const response = await fetch(requestUrl, { ...options, headers, cache: "no-store" });
+  const response = await fetch(`${API_URL}${path}`, { ...options, headers, cache: "no-store" });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
     if (response.status === 401 && path !== "/login") showLogin("Сессия завершена. Войдите снова.");
@@ -215,7 +204,7 @@ function imageFromFile(file) {
       URL.revokeObjectURL(source);
       reject(new Error("Не удалось прочитать изображение"));
     };
-    image.src = mediaUrl(source);
+    image.src = source;
   });
 }
 
@@ -268,7 +257,7 @@ function imageFromSource(source) {
     image.crossOrigin = "anonymous";
     image.onload = () => resolve(image);
     image.onerror = () => reject(new Error("Не удалось открыть фотографию для обрезки"));
-    image.src = mediaUrl(source);
+    image.src = source;
   });
 }
 
@@ -436,7 +425,7 @@ function photoManager(product, productIndex) {
   if (viewerSource) {
     const viewerManager = el("div", "photo-item viewer-photo-manager");
     const viewerImage = document.createElement("img");
-    viewerImage.src = mediaUrl(viewerSource);
+    viewerImage.src = viewerSource;
     viewerImage.alt = product.viewerImageCaption || `${product.title || "Товар"}, главное фото`;
     const viewerDetails = el("div", "photo-details");
     viewerDetails.append(el("strong", "", "Фото при открытии набора"));
@@ -505,7 +494,7 @@ function photoManager(product, productIndex) {
       renderProducts();
     });
     const image = document.createElement("img");
-    image.src = mediaUrl(source);
+    image.src = source;
     image.alt = `${product.title || "Товар"}, фото ${photoIndex + 1}`;
 
     const details = el("div", "photo-details");
@@ -518,7 +507,7 @@ function photoManager(product, productIndex) {
     sourceInput.value = source;
     sourceInput.setAttribute("aria-label", `Адрес фото ${photoIndex + 1}`);
     sourceInput.addEventListener("input", () => {
-      image.src = mediaUrl(sourceInput.value);
+      image.src = sourceInput.value;
       photos[photoIndex] = sourceInput.value;
       setProductPhotos(productIndex, photos);
       markDirty();
@@ -656,7 +645,7 @@ function renderPreview() {
     const imageWrap = el("div", "preview-img");
     if (product.image) {
       const image = document.createElement("img");
-      image.src = mediaUrl(product.image);
+      image.src = product.image;
       image.alt = product.title || "";
       imageWrap.append(image);
     }
@@ -673,7 +662,7 @@ function renderPreview() {
     const gallery = el("div", "preview-gallery");
     [product.viewerImage || product.image, ...(product.images || [])].filter(Boolean).slice(0, 6).forEach((source) => {
       const thumb = document.createElement("img");
-      thumb.src = mediaUrl(source);
+      thumb.src = source;
       thumb.alt = "";
       gallery.append(thumb);
     });
@@ -779,7 +768,7 @@ function renderPageImages() {
     const entry = pageImageEntry(key, fallbackSource, fallbackCaption);
     const item = el("article", "page-photo-item");
     const image = document.createElement("img");
-    image.src = mediaUrl(entry.src);
+    image.src = entry.src;
     image.alt = entry.caption || title;
     const details = el("div", "page-photo-details");
     details.append(el("strong", "", title));
@@ -885,7 +874,7 @@ function renderReviewsAdmin() {
       renderReviewsAdmin();
     });
     const image = document.createElement("img");
-    image.src = mediaUrl(review.src);
+    image.src = review.src;
     image.alt = review.caption || `Отзыв ${index + 1}`;
     const details = el("div", "review-admin-details");
     details.append(el("strong", "", `Отзыв ${index + 1}`));
