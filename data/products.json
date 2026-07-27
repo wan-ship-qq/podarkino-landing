@@ -56,20 +56,26 @@
     "weight": "200 г",
     "price": "670 ₽",
     "image": "assets/sweets-tenderness-box-3d.png?v=20260720-1925",
-    "viewerImage": "assets/sweets-tenderness-box-full.jpg?v=20260720-1925",
+    "viewerImage": "assets/admin/sweets-tenderness-box-full-crop-f9c1bfac-d7c5-4d20-b559-1ed71b50c357.webp",
     "images": [
-      "assets/sweets-tenderness-detail-1.jpg",
-      "assets/sweets-tenderness-detail-2.jpg",
+      "assets/admin/sweets-tenderness-detail-9-crop-6b4c0a9a-560e-4918-82da-77a9e7889524.webp",
+      "assets/admin/sweets-tenderness-detail-5-crop-97f17fb3-f0a0-4984-9429-a1476f493bed.webp",
+      "assets/admin/sweets-tenderness-detail-4-crop-dc04dbb9-b4d1-4be9-bcdf-b7830c041218.webp",
       "assets/sweets-tenderness-detail-3.jpg",
-      "assets/sweets-tenderness-detail-4.jpg",
-      "assets/sweets-tenderness-detail-5.jpg",
-      "assets/sweets-tenderness-detail-6.jpg",
-      "assets/sweets-tenderness-detail-7.jpg",
-      "assets/sweets-tenderness-detail-8.jpg",
-      "assets/sweets-tenderness-detail-9.jpg"
+      "assets/admin/sweets-tenderness-detail-7-crop-acd41225-a7dd-4c2c-bd00-8bc940481fa8.webp",
+      "assets/admin/sweets-tenderness-detail-8-crop-502ca74a-4409-418c-9cff-366fb80426ca.webp"
     ],
     "badge": "новинка",
-    "visible": true
+    "visible": true,
+    "imageCaption": "",
+    "imageCaptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
   },
   {
     "title": "Подарочный набор сладостей «С днём рождения!»",
